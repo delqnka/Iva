@@ -12,6 +12,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
     <BookingProvider
       salonSlug={process.env.NEXT_PUBLIC_SALON_SLUG}
       engineUrl={process.env.NEXT_PUBLIC_ENGINE_URL}
+      apiKey={process.env.NEXT_PUBLIC_BOOKING_API_KEY}
       successUrl={`${siteUrl}/booking/success`}
       cancelUrl={`${siteUrl}/booking/cancel`}
       accentGradient="linear-gradient(135deg, #bfe8cd 0%, #7fc79a 100%)"

@@ -18,9 +18,10 @@ Required environment values:
 
 ```bash
 NEXT_PUBLIC_ENGINE_URL=https://app.alternine.co
+NEXT_PUBLIC_BOOKING_API_KEY=pk_live_xxxxxxxxxxxxxxxxxxxxx
 NEXT_PUBLIC_SALON_SLUG=reset-body-lab
 NEXT_PUBLIC_SITE_URL=https://resetbodylab.com
-NEXT_PUBLIC_PRIMARY_SERVICE_ID=pilates-reformer-50
+NEXT_PUBLIC_PRIMARY_SERVICE_ID=pilates-bed
 ```
 
 `NEXT_PUBLIC_PRIMARY_SERVICE_ID` must match the real service id from Clicka.
