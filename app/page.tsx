@@ -2,12 +2,21 @@ import Image from "next/image";
 import { PrimaryBookingButton, ServiceBookingCard } from "./booking-actions";
 
 const benefits = [
-  "По-добра стойка и по-стабилен център",
-  "Повече сила без грубо натоварване",
-  "По-стегната фигура с контролирано движение",
-  "По-добра мобилност и усещане за лекота",
-  "Подкрепа за дишане, баланс и координация",
-  "Тренировка, която щади ставите"
+  {
+    title: "Стойка и център",
+    text: "По-стабилен корем, по-изправена линия на тялото и повече контрол в ежедневните движения.",
+    image: "/Pilates Reformer Workout – Core & Leg Strength.jpeg"
+  },
+  {
+    title: "Сила без грубост",
+    text: "Пружинното съпротивление натоварва мускулите плавно, без усещане за хаотична тренировка.",
+    image: "/AI Fitness Aesthetic – Pilates Reformer Workout.jpeg"
+  },
+  {
+    title: "Лекота и мобилност",
+    text: "Работиш за разтягане, координация и дишане в темпо, което позволява на тялото да се отпусне.",
+    image: "/reformer pilates studio branding.jpeg"
+  }
 ];
 
 const suitableFor = [
@@ -39,8 +48,31 @@ const packages = [
 ];
 
 const instructors = [
-  { name: "Reset Body Lab екип", role: "Reformer Pilates" },
-  { name: "Персонално внимание", role: "Корекция на техника" }
+  {
+    name: "Reset Body Lab екип",
+    role: "Reformer Pilates",
+    image: "/Studio Glide Pilates.jpeg"
+  },
+  {
+    name: "Персонално внимание",
+    role: "Корекция на техника",
+    image: "/reformer pilates studio branding.jpeg"
+  }
+];
+
+const galleryImages = [
+  {
+    src: "/Studio Glide Pilates.jpeg",
+    alt: "Минималистично Reformer Pilates студио"
+  },
+  {
+    src: "/Mantyhose Çorap.jpeg",
+    alt: "Pilates детайл от тренировка"
+  },
+  {
+    src: "/_.jpeg",
+    alt: "Reset Body Lab Pilates атмосфера"
+  }
 ];
 
 const faqs = [
@@ -72,13 +104,12 @@ export default function HomePage() {
       <header className="site-header">
         <a className="brand" href="#top" aria-label="Reset Body Lab начало">
           <Image
-            src="/reset-body-lab-logo.png"
+            src="/logo.svg"
             alt="Reset Body Lab Pilates"
-            width={56}
-            height={56}
+            width={78}
+            height={78}
             priority
           />
-          <span>Reset Body Lab</span>
         </a>
         <nav aria-label="Основна навигация">
           <a href="#reformer">Reformer Pilates</a>
@@ -113,12 +144,15 @@ export default function HomePage() {
 
       <section className="booking-strip" aria-label="Бърза информация">
         <div>
+          <strong>50</strong>
           <span>50 минути</span>
         </div>
         <div>
+          <strong>5</strong>
           <span>5 reformer легла</span>
         </div>
         <div>
+          <strong>малка</strong>
           <span>Малка група</span>
         </div>
       </section>
@@ -144,12 +178,26 @@ export default function HomePage() {
       <section className="benefits-section">
         <div className="section-copy">
           <h2>Ползи</h2>
+          <p>
+            Вместо списък с обещания, фокусът е върху усещането след
+            тренировката: по-ясна стойка, по-уверено движение и спокойно тяло.
+          </p>
         </div>
-        <div className="tile-grid">
+        <div className="benefit-stories">
           {benefits.map((benefit) => (
-            <div className="tile" key={benefit}>
-              <span>{benefit}</span>
-            </div>
+            <article className="benefit-story" key={benefit.title}>
+              <Image
+                src={benefit.image}
+                alt={benefit.title}
+                width={760}
+                height={860}
+                sizes="(max-width: 1040px) 100vw, 33vw"
+              />
+              <div>
+                <h3>{benefit.title}</h3>
+                <p>{benefit.text}</p>
+              </div>
+            </article>
           ))}
         </div>
       </section>
@@ -164,7 +212,10 @@ export default function HomePage() {
         </div>
         <div className="list-panel">
           {suitableFor.map((item) => (
-            <p key={item}>{item}</p>
+            <div key={item}>
+              <span aria-hidden="true" />
+              <p>{item}</p>
+            </div>
           ))}
         </div>
       </section>
@@ -227,7 +278,13 @@ export default function HomePage() {
         <div className="instructor-grid">
           {instructors.map((item) => (
             <article key={item.name}>
-              <div className="portrait" aria-hidden="true" />
+              <Image
+                src={item.image}
+                alt={item.name}
+                width={960}
+                height={600}
+                sizes="(max-width: 1040px) 100vw, 50vw"
+              />
               <h3>{item.name}</h3>
               <p>{item.role}</p>
             </article>
@@ -240,9 +297,16 @@ export default function HomePage() {
           <h2>Галерия</h2>
         </div>
         <div className="gallery-grid" aria-label="Reset Body Lab галерия">
-          <div />
-          <div />
-          <div />
+          {galleryImages.map((image) => (
+            <Image
+              key={image.src}
+              src={image.src}
+              alt={image.alt}
+              width={900}
+              height={1100}
+              sizes="(max-width: 1040px) 100vw, 33vw"
+            />
+          ))}
         </div>
       </section>
 

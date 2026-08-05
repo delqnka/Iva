@@ -20,7 +20,19 @@ export const metadata: Metadata = {
     title: "Reset Body Lab | Pilates",
     description:
       "Reformer Pilates: най-модерната форма на пилатес.",
-    images: ["/reset-body-lab-logo.png"]
+    images: ["/logo.svg"]
+  },
+  twitter: {
+    card: "summary",
+    title: "Reset Body Lab | Pilates",
+    description:
+      "Reformer Pilates за по-добра стойка, повече сила и по-стегната фигура.",
+    images: ["/logo.svg"]
+  },
+  icons: {
+    icon: "/logo.svg",
+    shortcut: "/logo.svg",
+    apple: "/logo.svg"
   }
 };
 
