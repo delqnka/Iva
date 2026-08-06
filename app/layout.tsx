@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Manrope } from "next/font/google";
+import { CookieBanner } from "./cookie-banner";
 import "./globals.css";
 import { Providers } from "./providers";
 
@@ -45,6 +46,7 @@ export default function RootLayout({
     <html lang="bg" className={manrope.variable}>
       <body>
         <Providers>{children}</Providers>
+        <CookieBanner />
       </body>
     </html>
   );
