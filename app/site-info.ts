@@ -5,6 +5,7 @@ type SiteInfoPayload = {
     phone?: unknown;
     city?: unknown;
     address?: unknown;
+    legal_info?: unknown;
   };
 };
 
@@ -14,6 +15,7 @@ export type SiteInfo = {
   phone: string;
   city: string;
   address: string;
+  legalInfo: unknown;
 };
 
 function normalizeString(value: unknown) {
@@ -30,7 +32,8 @@ export async function loadSiteInfo(): Promise<SiteInfo> {
     email: "",
     phone: "",
     city: "",
-    address: ""
+    address: "",
+    legalInfo: null
   };
 
   if (!engineUrl || !salonSlug) return fallback;
@@ -56,7 +59,8 @@ export async function loadSiteInfo(): Promise<SiteInfo> {
       email: normalizeString(salon.email),
       phone: normalizeString(salon.phone),
       city: normalizeString(salon.city),
-      address: normalizeString(salon.address)
+      address: normalizeString(salon.address),
+      legalInfo: salon.legal_info ?? null
     };
   } catch {
     return fallback;

@@ -3,7 +3,19 @@
 import { useEffect, useState } from "react";
 import { COOKIE_CONSENT_KEY } from "./cookie-banner";
 
-export function ConsentMap({ title, src }: { title: string; src: string }) {
+export function ConsentMap({
+  title,
+  src,
+  heading,
+  body,
+  action
+}: {
+  title: string;
+  src: string;
+  heading: string;
+  body: string;
+  action: string;
+}) {
   const [consent, setConsent] = useState<"accepted" | "rejected" | null>(null);
 
   useEffect(() => {
@@ -40,11 +52,8 @@ export function ConsentMap({ title, src }: { title: string; src: string }) {
   return (
     <div className="map-frame map-frame--placeholder">
       <div className="map-consent-card">
-        <h3>Картата е изключена до съгласие</h3>
-        <p>
-          Google Maps е външна услуга и може да поставя cookies. Приеми
-          функционалните cookies, за да я заредиш.
-        </p>
+        <h3>{heading}</h3>
+        <p>{body}</p>
         <button
           type="button"
           className="btn btn-dark"
@@ -55,7 +64,7 @@ export function ConsentMap({ title, src }: { title: string; src: string }) {
             );
           }}
         >
-          Зареди картата
+          {action}
         </button>
       </div>
     </div>

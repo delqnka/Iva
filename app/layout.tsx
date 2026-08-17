@@ -11,21 +11,21 @@ const manrope = Manrope({
 });
 
 export const metadata: Metadata = {
-  title: "Reset Body Lab | Pilates",
+  title: "Reset body lab - Реформър Пилатес студио в град Варна",
   description:
     "Reformer Pilates за по-добра стойка, повече сила и по-стегната фигура.",
   metadataBase: new URL(
     process.env.NEXT_PUBLIC_SITE_URL || "https://resetbodylab.com"
   ),
   openGraph: {
-    title: "Reset Body Lab | Pilates",
+    title: "Reset body lab - Реформър Пилатес студио в град Варна",
     description:
       "Reformer Pilates: най-модерната форма на пилатес.",
     images: ["/logo.svg"]
   },
   twitter: {
     card: "summary",
-    title: "Reset Body Lab | Pilates",
+    title: "Reset body lab - Реформър Пилатес студио в град Варна",
     description:
       "Reformer Pilates за по-добра стойка, повече сила и по-стегната фигура.",
     images: ["/logo.svg"]

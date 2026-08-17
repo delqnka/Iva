@@ -1,21 +1,26 @@
 "use client";
 
-import { BookingButton, useBooking } from "@clicka1/booking";
+import { BookingButton } from "@clicka1/booking";
+import { bookingCardCopy, type Locale } from "./i18n";
 
 const primaryServiceId =
   process.env.NEXT_PUBLIC_PRIMARY_SERVICE_ID || "pilates-reformer-50";
 
 export function PrimaryBookingButton({
   children = "Запази час",
-  variant = "dark"
+  variant = "dark",
+  className = "",
+  service = primaryServiceId
 }: {
   children?: React.ReactNode;
   variant?: "dark" | "light";
+  className?: string;
+  service?: string;
 }) {
   return (
     <BookingButton
-      service={primaryServiceId}
-      className={variant === "dark" ? "btn btn-dark" : "btn btn-light"}
+      service={service}
+      className={`${variant === "dark" ? "btn btn-dark" : "btn btn-light"} ${className}`.trim()}
     >
       {children}
     </BookingButton>
@@ -23,28 +28,26 @@ export function PrimaryBookingButton({
 }
 
 export function ServiceBookingCard() {
-  const { open, isReady } = useBooking();
+  return <LocalizedServiceBookingCard locale="bg" />;
+}
+
+export function LocalizedServiceBookingCard({ locale }: { locale: Locale }) {
+  const copy = bookingCardCopy[locale];
 
   return (
-    <button
-      type="button"
-      className="service-card"
-      onClick={() => open(primaryServiceId)}
-      aria-label="Резервирай Pilates reformer 50 минути"
-    >
+    <div className="service-card" aria-label={copy.ariaLabel}>
       <span className="service-card__top">
-        <span>Reformer Pilates</span>
-        <span>50 мин</span>
+        <span>{copy.topLabel}</span>
+        <span>{copy.topMeta}</span>
       </span>
-      <span className="service-card__title">Запази своето легло</span>
-      <span className="service-card__body">
-        Избери свободен час директно в сайта. Местата са ограничени до 5
-        reformer легла.
+      <span className="service-card__facts">
+        <span>{copy.duration}</span>
+        <span>{copy.capacity}</span>
       </span>
+      <span className="service-card__body">{copy.body}</span>
       <span className="service-card__bottom">
-        <span>5 легла</span>
-        <span>{isReady ? "Резервирай" : "Зарежда..."}</span>
+        <PrimaryBookingButton>{copy.cta}</PrimaryBookingButton>
       </span>
-    </button>
+    </div>
   );
 }
