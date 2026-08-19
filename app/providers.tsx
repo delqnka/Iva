@@ -20,7 +20,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
       apiKey={process.env.NEXT_PUBLIC_BOOKING_API_KEY}
       successUrl={`${siteUrl}${localizedPath(locale, "/booking/success")}`}
       cancelUrl={`${siteUrl}${localizedPath(locale, "/booking/cancel")}`}
-      accentGradient="linear-gradient(135deg, #778171 0%, #485144 100%)"
+      accentGradient="linear-gradient(135deg, #849078 0%, #5f7354 100%)"
     >
       {children}
     </BookingProvider>
