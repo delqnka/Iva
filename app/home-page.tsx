@@ -2,7 +2,6 @@ import { Facebook, Instagram, MapPinned, Music4, Phone } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { BenefitsGrid } from "./benefits-grid";
 import { GalleryPreview, OpenGalleryButton } from "./gallery-preview";
 import { PrimaryBookingButton } from "./booking-actions";
 import { homeCopy, isLocale, type Locale, localizedPath } from "./i18n";
@@ -1010,8 +1009,28 @@ export async function HomePage({ locale }: { locale: Locale }) {
         })}
       </section>
 
+      <section className="vibe-title-section">
+        <div className="vibe-title-mark" aria-hidden="true" />
+        <div className="vibe-title-row">
+          <span />
+          <h2>{locale === "bg" ? "Открий тренировките" : "Discover the training"}</h2>
+          <span />
+        </div>
+        <p>{locale === "bg" ? "по reformer pilates в Reset Body Lab" : "with reformer pilates at Reset Body Lab"}</p>
+      </section>
+
       <section id="reformer" className="intro-section">
-        <div className="section-copy section-copy--center">
+        <div className="split-section split-section--intro">
+          <div className="split-section__media">
+            <Image
+              src={pageContent.galleryImages[0]?.src ?? "/Studio Glide Pilates.jpeg"}
+              alt={pageContent.galleryImages[0]?.alt ?? pageContent.salonName}
+              width={900}
+              height={760}
+              sizes="(max-width: 900px) 100vw, 50vw"
+            />
+          </div>
+          <div className="section-copy split-section__copy">
           {reformerSubtitle ? <p className="section-label">{reformerSubtitle}</p> : null}
           <h2>{pageContent.siteContent.reformer.title}</h2>
           <p>
@@ -1025,31 +1044,60 @@ export async function HomePage({ locale }: { locale: Locale }) {
               pageContent.siteContent.reformer.body
             )}
           </p>
+          </div>
         </div>
       </section>
 
       <section className="benefits-section">
-        <div className="section-copy section-copy--center">
-          <h2>{pageContent.siteContent.benefits.title}</h2>
+        <div className="split-section split-section--dark">
+          <div className="section-copy split-section__copy">
+            <h2>{locale === "bg" ? "Основните ползи включват:" : "Main benefits include:"}</h2>
+            <ul className="check-list check-list--light">
+              {pageContent.siteContent.benefits.items.map((benefit) => (
+                <li key={benefit.id}>{benefit.title}</li>
+              ))}
+            </ul>
+          </div>
+          <div className="split-section__media">
+            <Image
+              src={pageContent.galleryImages[1]?.src ?? "/Mantyhose Çorap.jpeg"}
+              alt={pageContent.galleryImages[1]?.alt ?? pageContent.salonName}
+              width={900}
+              height={760}
+              sizes="(max-width: 900px) 100vw, 50vw"
+            />
+          </div>
         </div>
-        <BenefitsGrid items={pageContent.siteContent.benefits.items} />
       </section>
 
       <section className="details-section">
-        <div className="details-list">
-          <details open>
-            <summary>{pageContent.siteContent.audience.title}</summary>
-            <p>{pageContent.siteContent.audience.intro}</p>
-            <ul className="details-bullets">
+        <div className="split-section split-section--training">
+          <div className="split-section__media">
+            <Image
+              src={pageContent.galleryImages[2]?.src ?? "/_.jpeg"}
+              alt={pageContent.galleryImages[2]?.alt ?? pageContent.salonName}
+              width={900}
+              height={760}
+              sizes="(max-width: 900px) 100vw, 50vw"
+            />
+          </div>
+          <div className="section-copy split-section__copy">
+            <h2>{locale === "bg" ? "Тренировките включват:" : "Training includes:"}</h2>
+            <ul className="check-list">
               {pageContent.siteContent.audience.items.map((item) => (
                 <li key={item}>{item}</li>
               ))}
             </ul>
-          </details>
+          </div>
         </div>
       </section>
 
       <section id="booking" className="reservation-section">
+        <p className="reservation-kicker">
+          {locale === "bg"
+            ? "Готова ли си да започнеш? Запази място сега:"
+            : "Ready to begin? Reserve your place now:"}
+        </p>
         <div className="reservation-panel">
           <div className="section-copy section-copy--center reservation-copy">
             <p className="section-label">{copy.bookingLabel}</p>
