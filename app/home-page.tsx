@@ -905,6 +905,8 @@ export async function HomePage({ locale }: { locale: Locale }) {
     locale === "bg" && pageContent.siteContent.reformer.body.includes(reformerEmphasis)
       ? pageContent.siteContent.reformer.body.split(reformerEmphasis)
       : null;
+  const pricingImages =
+    pageContent.galleryImages.length > 0 ? pageContent.galleryImages : getFallbackGalleryImages(locale);
 
   return (
     <main>
@@ -1135,24 +1137,34 @@ export async function HomePage({ locale }: { locale: Locale }) {
           <h2>{copy.pricingLabel}</h2>
         </div>
         <div className="pricing-grid">
-          {pageContent.siteContent.pricing.items.map((item) => (
-            <article
-              key={item.id}
-              className={item.price ? "pricing-card pricing-card--with-price" : "pricing-card pricing-card--no-price"}
-            >
-              <div className="pricing-copy">
-                <h3>{item.name}</h3>
-                <p>{item.text}</p>
-              </div>
-              {item.price ? <p className="price">{item.price}</p> : null}
-              <PrimaryBookingButton
-                className="btn-compact"
-                service={item.serviceId || undefined}
-              >
-                {getPricingButtonLabel(item, locale)}
-              </PrimaryBookingButton>
-            </article>
-          ))}
+          {pageContent.siteContent.pricing.items.map((item, index) => {
+            const pricingImage = pricingImages[index % pricingImages.length];
+
+            return (
+              <article key={item.id} className="pricing-card">
+                <div className="pricing-card__image">
+                  <Image
+                    src={pricingImage.src}
+                    alt={`${item.name} ${pageContent.salonName}`}
+                    width={640}
+                    height={560}
+                    sizes="(max-width: 820px) 100vw, 33vw"
+                  />
+                </div>
+                <div className="pricing-copy">
+                  <h3>{item.name}</h3>
+                  <p>{item.text}</p>
+                </div>
+                {item.price ? <p className="price">{item.price}</p> : null}
+                <PrimaryBookingButton
+                  className="btn-compact"
+                  service={item.serviceId || undefined}
+                >
+                  {getPricingButtonLabel(item, locale)}
+                </PrimaryBookingButton>
+              </article>
+            );
+          })}
         </div>
         {pageContent.siteContent.pricing.note ? (
           <div className="section-copy section-copy--center pricing-note">

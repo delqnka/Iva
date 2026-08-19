@@ -1126,23 +1126,24 @@ p {
 
 .pricing-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 18px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(18px, 2.4vw, 28px);
   max-width: none;
-  margin: 34px auto 0;
+  margin: 36px auto 0;
 }
 
 .pricing-grid article {
   position: relative;
   display: grid;
-  min-height: 0;
+  min-height: 100%;
   grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: auto 1fr auto auto;
   gap: 18px;
   align-items: start;
-  padding: 26px;
+  padding: 12px 12px 20px;
   border-radius: 8px;
-  background: rgba(255, 254, 250, 0.88);
-  box-shadow: 0 18px 42px rgba(0, 0, 0, 0.09);
+  background: #fffefa;
+  box-shadow: 0 24px 58px rgba(48, 42, 35, 0.085);
   overflow: hidden;
   transition:
     transform 220ms cubic-bezier(0.22, 1, 0.36, 1),
@@ -1165,8 +1166,8 @@ p {
 .pricing-grid article:hover,
 .pricing-grid article:focus-within {
   transform: translateY(-4px) scale(1.004);
-  background: rgba(255, 254, 250, 0.96);
-  box-shadow: 0 26px 54px rgba(0, 0, 0, 0.16);
+  background: #ffffff;
+  box-shadow: 0 30px 68px rgba(48, 42, 35, 0.13);
 }
 
 .pricing-grid article:hover::after,
@@ -1178,38 +1179,54 @@ p {
   transform: translateY(-1px) scale(0.998);
 }
 
-.pricing-card--no-price {
-  grid-column: 1 / -1;
-  grid-template-columns: minmax(0, 1fr) auto;
-  justify-items: center;
-  align-items: center;
-  text-align: left;
-  gap: 14px;
+.pricing-card__image {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 0.86;
+  overflow: hidden;
+  border-radius: 6px;
+  background: rgba(222, 214, 203, 0.7);
 }
 
-.pricing-card--no-price .pricing-copy {
+.pricing-card__image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scale(1.01);
+  transition: transform 420ms cubic-bezier(0.22, 1, 0.36, 1), filter 220ms ease;
+}
+
+.pricing-grid article:hover .pricing-card__image img,
+.pricing-grid article:focus-within .pricing-card__image img {
+  transform: scale(1.055);
+  filter: saturate(1.03) contrast(1.02);
+}
+
+.pricing-copy {
   display: grid;
-  justify-items: start;
-}
-
-.pricing-card--no-price .pricing-copy p {
-  max-width: 30rem;
-  text-align: left;
+  gap: 8px;
+  padding: 2px 8px 0;
 }
 
 .pricing-copy h3 {
-  margin-bottom: 6px;
-  font-size: clamp(20px, 1.7vw, 24px);
+  margin: 0;
+  color: var(--text);
+  font-size: clamp(22px, 2.1vw, 30px);
+  line-height: 1.08;
+  text-wrap: balance;
 }
 
 .pricing-copy p {
-  max-width: 26rem;
-  font-size: 14px;
+  max-width: 24rem;
+  font-size: 15px;
+  line-height: 1.55;
   color: var(--muted);
+  text-wrap: pretty;
 }
 
 .price {
   margin: 0;
+  padding: 0 8px;
   color: var(--accent-dark);
   font-family: var(--font-sans), system-ui, sans-serif;
   font-size: clamp(17px, 1.5vw, 20px);
@@ -1223,17 +1240,13 @@ p {
   width: auto;
   min-width: 132px;
   padding-inline: 18px;
-  margin-left: 0;
+  margin: 8px 8px 0;
   justify-self: start;
   transition:
     transform 220ms cubic-bezier(0.22, 1, 0.36, 1),
     background 220ms ease,
     color 220ms ease,
     box-shadow 220ms cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-.pricing-card--no-price .btn {
-  justify-self: end;
 }
 
 .pricing-grid article:hover .btn-dark,
@@ -1882,19 +1895,13 @@ p {
     line-height: 1.56;
   }
 
+  .pricing-grid {
+    grid-template-columns: 1fr;
+  }
+
   .pricing-grid article {
-    grid-template-columns: 1fr;
-    gap: 10px;
-    padding: 16px 16px;
-  }
-
-  .pricing-card--no-price {
-    grid-template-columns: 1fr;
-    text-align: center;
-  }
-
-  .pricing-card--no-price .btn {
-    justify-self: center;
+    gap: 12px;
+    padding: 10px 10px 18px;
   }
 
   .pricing-grid article:hover,
@@ -1905,8 +1912,8 @@ p {
   .pricing-grid .btn {
     width: auto;
     min-width: 0;
-    margin: 2px 0 0;
-    justify-self: center;
+    margin: 4px 8px 0;
+    justify-self: start;
   }
 
   .price {
