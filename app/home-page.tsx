@@ -447,6 +447,30 @@ function normalizeLocalizedEditableString({
   return fallback;
 }
 
+function normalizeLocalizedRequiredString({
+  record,
+  locale,
+  bgKey,
+  enKey,
+  fallback
+}: {
+  record: Record<string, unknown>;
+  locale: Locale;
+  bgKey: string;
+  enKey: string;
+  fallback: string;
+}) {
+  const value = normalizeLocalizedEditableString({
+    record,
+    locale,
+    bgKey,
+    enKey,
+    fallback
+  });
+
+  return value || fallback;
+}
+
 function getLocalizedEditableValue({
   record,
   locale,
@@ -771,14 +795,14 @@ async function loadPageContent(locale: Locale): Promise<PageContent> {
 
     return {
       salonName: normalizeString(salon.name) || fallback.salonName,
-      heroTitle: normalizeLocalizedEditableString({
+      heroTitle: normalizeLocalizedRequiredString({
         record: salonRecord,
         locale,
         bgKey: "hero_title",
         enKey: "hero_title_en",
         fallback: fallbackHeroTitle
       }),
-      heroSubtitle: normalizeLocalizedEditableString({
+      heroSubtitle: normalizeLocalizedRequiredString({
         record: salonRecord,
         locale,
         bgKey: "hero_subtitle",
