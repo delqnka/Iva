@@ -864,10 +864,8 @@ export async function HomePage({ locale }: { locale: Locale }) {
     city: pageContent.city
   });
   const contactLines = [
-    pageContent.siteContent.contact.body,
     pageContent.address,
     pageContent.city,
-    pageContent.phone,
     pageContent.email
   ].filter(Boolean);
   const footerContactLines =
@@ -1259,18 +1257,18 @@ export async function HomePage({ locale }: { locale: Locale }) {
             </a>
           </div>
         </div>
-        <div className="site-footer__links">
-          <Link href={localizedPath(locale, "/privacy-policy")}>
-            {copy.legalLinks.privacy}
-          </Link>
-          <Link href={localizedPath(locale, "/terms")}>
-            {copy.legalLinks.terms}
-          </Link>
-          <Link href={localizedPath(locale, "/cookies")}>
-            {copy.legalLinks.cookies}
-          </Link>
-        </div>
         <div className="site-footer__bottom">
+          <div className="site-footer__links">
+            <Link href={localizedPath(locale, "/privacy-policy")}>
+              {copy.legalLinks.privacy}
+            </Link>
+            <Link href={localizedPath(locale, "/terms")}>
+              {copy.legalLinks.terms}
+            </Link>
+            <Link href={localizedPath(locale, "/cookies")}>
+              {copy.legalLinks.cookies}
+            </Link>
+          </div>
           <p>
             {pageContent.salonName} {footerYear}.{" "}
             {locale === "bg" ? "Всички права запазени." : "All rights reserved."}
