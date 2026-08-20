@@ -23,8 +23,8 @@ function normalizeString(value: unknown) {
 }
 
 export async function loadSiteInfo(): Promise<SiteInfo> {
-  const engineUrl = process.env.NEXT_PUBLIC_ENGINE_URL?.trim();
-  const salonSlug = process.env.NEXT_PUBLIC_SALON_SLUG?.trim();
+  const engineUrl = process.env.NEXT_PUBLIC_ENGINE_URL?.trim() || "https://app.alternine.co";
+  const salonSlug = process.env.NEXT_PUBLIC_SALON_SLUG?.trim() || "salon";
   const apiKey = process.env.NEXT_PUBLIC_BOOKING_API_KEY?.trim();
 
   const fallback = {
@@ -35,8 +35,6 @@ export async function loadSiteInfo(): Promise<SiteInfo> {
     address: "",
     legalInfo: null
   };
-
-  if (!engineUrl || !salonSlug) return fallback;
 
   try {
     const response = await fetch(

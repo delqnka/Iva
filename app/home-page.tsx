@@ -765,11 +765,9 @@ async function loadPageContent(locale: Locale): Promise<PageContent> {
     tiktokUsername: ""
   };
 
-  const engineUrl = process.env.NEXT_PUBLIC_ENGINE_URL?.trim();
-  const salonSlug = process.env.NEXT_PUBLIC_SALON_SLUG?.trim();
+  const engineUrl = process.env.NEXT_PUBLIC_ENGINE_URL?.trim() || "https://app.alternine.co";
+  const salonSlug = process.env.NEXT_PUBLIC_SALON_SLUG?.trim() || "salon";
   const apiKey = process.env.NEXT_PUBLIC_BOOKING_API_KEY?.trim();
-
-  if (!engineUrl || !salonSlug) return fallback;
 
   try {
     const response = await fetch(

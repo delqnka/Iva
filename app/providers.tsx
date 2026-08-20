@@ -4,6 +4,11 @@ import { BookingProvider } from "@clicka1/booking";
 import "@clicka1/booking/styles.css";
 import { getLocaleFromPathname, localizedPath } from "./i18n";
 
+const bookingEngineUrl =
+  process.env.NEXT_PUBLIC_ENGINE_URL?.trim() || "https://app.alternine.co";
+const bookingSalonSlug =
+  process.env.NEXT_PUBLIC_SALON_SLUG?.trim() || "salon";
+
 export function Providers({ children }: { children: React.ReactNode }) {
   const siteUrl =
     process.env.NEXT_PUBLIC_SITE_URL ||
@@ -15,8 +20,8 @@ export function Providers({ children }: { children: React.ReactNode }) {
 
   return (
     <BookingProvider
-      salonSlug={process.env.NEXT_PUBLIC_SALON_SLUG}
-      engineUrl={process.env.NEXT_PUBLIC_ENGINE_URL}
+      salonSlug={bookingSalonSlug}
+      engineUrl={bookingEngineUrl}
       apiKey={process.env.NEXT_PUBLIC_BOOKING_API_KEY}
       successUrl={`${siteUrl}${localizedPath(locale, "/booking/success")}`}
       cancelUrl={`${siteUrl}${localizedPath(locale, "/booking/cancel")}`}
