@@ -1,8 +1,8 @@
-import { Facebook, Instagram, MapPinned, Music4, Phone } from "lucide-react";
+import { Facebook, Instagram, Languages, MapPinned, Music4, Phone } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { GalleryPreview, OpenGalleryButton } from "./gallery-preview";
+import { GalleryPreview } from "./gallery-preview";
 import { PrimaryBookingButton } from "./booking-actions";
 import { homeCopy, isLocale, type Locale, localizedPath } from "./i18n";
 
@@ -411,17 +411,72 @@ function isRecord(value: unknown): value is Record<string, unknown> {
   return Boolean(value) && typeof value === "object" && !Array.isArray(value);
 }
 
-function normalizeStringList(value: unknown, fallback: string[]) {
-  if (!Array.isArray(value)) return fallback;
+function hasField(record: Record<string, unknown>, key: string) {
+  return Object.prototype.hasOwnProperty.call(record, key);
+}
+
+function normalizeEditableString(
+  record: Record<string, unknown>,
+  key: string,
+  fallback: string
+) {
+  return hasField(record, key) ? normalizeString(record[key]) : fallback;
+}
+
+function normalizeLocalizedEditableString({
+  record,
+  locale,
+  bgKey,
+  enKey,
+  fallback
+}: {
+  record: Record<string, unknown>;
+  locale: Locale;
+  bgKey: string;
+  enKey: string;
+  fallback: string;
+}) {
+  if (locale === "en" && hasField(record, enKey)) {
+    return normalizeString(record[enKey]);
+  }
+
+  if (hasField(record, bgKey)) {
+    return normalizeString(record[bgKey]);
+  }
+
+  return fallback;
+}
+
+function getLocalizedEditableValue({
+  record,
+  locale,
+  bgKey,
+  enKey
+}: {
+  record: Record<string, unknown>;
+  locale: Locale;
+  bgKey: string;
+  enKey: string;
+}) {
+  if (locale === "en" && hasField(record, enKey)) return record[enKey];
+  if (hasField(record, bgKey)) return record[bgKey];
+  return undefined;
+}
+
+function normalizeStringList(value: unknown, fallback: string[], hasEditableValue = true) {
+  if (!hasEditableValue) return fallback;
+  if (!Array.isArray(value)) return [];
   const items = value.map((item) => normalizeString(item)).filter(Boolean);
-  return items.length > 0 ? items : fallback;
+  return items;
 }
 
 function normalizeBenefitItems(
   value: unknown,
-  fallback: SiteContentBenefitItem[]
+  fallback: SiteContentBenefitItem[],
+  hasEditableValue = true
 ) {
-  if (!Array.isArray(value)) return fallback;
+  if (!hasEditableValue) return fallback;
+  if (!Array.isArray(value)) return [];
 
   const items = value
     .map((item, index) => {
@@ -437,11 +492,16 @@ function normalizeBenefitItems(
     })
     .filter(Boolean) as SiteContentBenefitItem[];
 
-  return items.length > 0 ? items : fallback;
+  return items;
 }
 
-function normalizePriceItems(value: unknown, fallback: SiteContentPriceItem[]) {
-  if (!Array.isArray(value)) return fallback;
+function normalizePriceItems(
+  value: unknown,
+  fallback: SiteContentPriceItem[],
+  hasEditableValue = true
+) {
+  if (!hasEditableValue) return fallback;
+  if (!Array.isArray(value)) return [];
 
   const items = value
     .map((item, index) => {
@@ -463,11 +523,12 @@ function normalizePriceItems(value: unknown, fallback: SiteContentPriceItem[]) {
     })
     .filter(Boolean) as SiteContentPriceItem[];
 
-  return items.length > 0 ? items : fallback;
+  return items;
 }
 
-function normalizeFaqItems(value: unknown, fallback: FaqItem[]) {
-  if (!Array.isArray(value)) return fallback;
+function normalizeFaqItems(value: unknown, fallback: FaqItem[], hasEditableValue = true) {
+  if (!hasEditableValue) return fallback;
+  if (!Array.isArray(value)) return [];
 
   const items = value
     .map((item, index) => {
@@ -501,185 +562,76 @@ function getPricingButtonLabel(item: SiteContentPriceItem, locale: Locale) {
 
 function normalizeSiteContent(raw: unknown, fallback: SiteContent) {
   const content = isRecord(raw) ? raw : {};
+  const benefits = content.benefits && isRecord(content.benefits) ? content.benefits : {};
+  const reformer = content.reformer && isRecord(content.reformer) ? content.reformer : {};
+  const audience = content.audience && isRecord(content.audience) ? content.audience : {};
+  const whyChooseUs =
+    content.whyChooseUs && isRecord(content.whyChooseUs) ? content.whyChooseUs : {};
+  const pricing = content.pricing && isRecord(content.pricing) ? content.pricing : {};
+  const instructors =
+    content.instructors && isRecord(content.instructors) ? content.instructors : {};
+  const gallery = content.gallery && isRecord(content.gallery) ? content.gallery : {};
+  const contact = content.contact && isRecord(content.contact) ? content.contact : {};
 
   return {
     benefits: {
-      title:
-        normalizeString(
-          content.benefits && isRecord(content.benefits)
-            ? content.benefits.title
-            : undefined
-        ) || fallback.benefits.title,
-      intro:
-        normalizeString(
-          content.benefits && isRecord(content.benefits)
-            ? content.benefits.intro
-            : undefined
-        ) || fallback.benefits.intro,
+      title: normalizeEditableString(benefits, "title", fallback.benefits.title),
+      intro: normalizeEditableString(benefits, "intro", fallback.benefits.intro),
       items: normalizeBenefitItems(
-        content.benefits && isRecord(content.benefits)
-          ? content.benefits.items
-          : undefined,
-        fallback.benefits.items
+        benefits.items,
+        fallback.benefits.items,
+        hasField(benefits, "items")
       )
     },
     reformer: {
-      title:
-        normalizeString(
-          content.reformer && isRecord(content.reformer)
-            ? content.reformer.title
-            : undefined
-        ) || fallback.reformer.title,
-      subtitle:
-        normalizeString(
-          content.reformer && isRecord(content.reformer)
-            ? content.reformer.subtitle
-            : undefined
-        ) || fallback.reformer.subtitle,
-      body:
-        normalizeString(
-          content.reformer && isRecord(content.reformer)
-            ? content.reformer.body
-            : undefined
-        ) || fallback.reformer.body
+      title: normalizeEditableString(reformer, "title", fallback.reformer.title),
+      subtitle: normalizeEditableString(reformer, "subtitle", fallback.reformer.subtitle),
+      body: normalizeEditableString(reformer, "body", fallback.reformer.body)
     },
     audience: {
-      title:
-        normalizeString(
-          content.audience && isRecord(content.audience)
-            ? content.audience.title
-            : undefined
-        ) || fallback.audience.title,
-      intro:
-        normalizeString(
-          content.audience && isRecord(content.audience)
-            ? content.audience.intro
-            : undefined
-        ) || fallback.audience.intro,
+      title: normalizeEditableString(audience, "title", fallback.audience.title),
+      intro: normalizeEditableString(audience, "intro", fallback.audience.intro),
       items: normalizeStringList(
-        content.audience && isRecord(content.audience)
-          ? content.audience.items
-          : undefined,
-        fallback.audience.items
+        audience.items,
+        fallback.audience.items,
+        hasField(audience, "items")
       ),
-      outro:
-        normalizeString(
-          content.audience && isRecord(content.audience)
-            ? content.audience.outro
-            : undefined
-        ) || fallback.audience.outro
+      outro: normalizeEditableString(audience, "outro", fallback.audience.outro)
     },
     whyChooseUs: {
-      title:
-        normalizeString(
-          content.whyChooseUs && isRecord(content.whyChooseUs)
-            ? content.whyChooseUs.title
-            : undefined
-        ) || fallback.whyChooseUs.title,
-      intro:
-        normalizeString(
-          content.whyChooseUs && isRecord(content.whyChooseUs)
-            ? content.whyChooseUs.intro
-            : undefined
-        ) || fallback.whyChooseUs.intro,
+      title: normalizeEditableString(whyChooseUs, "title", fallback.whyChooseUs.title),
+      intro: normalizeEditableString(whyChooseUs, "intro", fallback.whyChooseUs.intro),
       items: normalizeStringList(
-        content.whyChooseUs && isRecord(content.whyChooseUs)
-          ? content.whyChooseUs.items
-          : undefined,
-        fallback.whyChooseUs.items
+        whyChooseUs.items,
+        fallback.whyChooseUs.items,
+        hasField(whyChooseUs, "items")
       ),
-      outro:
-        normalizeString(
-          content.whyChooseUs && isRecord(content.whyChooseUs)
-            ? content.whyChooseUs.outro
-            : undefined
-        ) || fallback.whyChooseUs.outro
+      outro: normalizeEditableString(whyChooseUs, "outro", fallback.whyChooseUs.outro)
     },
     pricing: {
-      title:
-        normalizeString(
-          content.pricing && isRecord(content.pricing)
-            ? content.pricing.title
-            : undefined
-        ) || fallback.pricing.title,
-      intro:
-        normalizeString(
-          content.pricing && isRecord(content.pricing)
-            ? content.pricing.intro
-            : undefined
-        ) || fallback.pricing.intro,
+      title: normalizeEditableString(pricing, "title", fallback.pricing.title),
+      intro: normalizeEditableString(pricing, "intro", fallback.pricing.intro),
       items: normalizePriceItems(
-        content.pricing && isRecord(content.pricing)
-          ? content.pricing.items
-          : undefined,
-        fallback.pricing.items
+        pricing.items,
+        fallback.pricing.items,
+        hasField(pricing, "items")
       ),
-      note:
-        normalizeString(
-          content.pricing && isRecord(content.pricing)
-            ? content.pricing.note
-            : undefined
-        ) || fallback.pricing.note
+      note: normalizeEditableString(pricing, "note", fallback.pricing.note)
     },
     instructors: {
-      title:
-        normalizeString(
-          content.instructors && isRecord(content.instructors)
-            ? content.instructors.title
-            : undefined
-        ) || fallback.instructors.title,
-      subtitle:
-        normalizeString(
-          content.instructors && isRecord(content.instructors)
-            ? content.instructors.subtitle
-            : undefined
-        ) || fallback.instructors.subtitle,
-      body:
-        normalizeString(
-          content.instructors && isRecord(content.instructors)
-            ? content.instructors.body
-            : undefined
-        ) || fallback.instructors.body
+      title: normalizeEditableString(instructors, "title", fallback.instructors.title),
+      subtitle: normalizeEditableString(instructors, "subtitle", fallback.instructors.subtitle),
+      body: normalizeEditableString(instructors, "body", fallback.instructors.body)
     },
     gallery: {
-      title:
-        normalizeString(
-          content.gallery && isRecord(content.gallery)
-            ? content.gallery.title
-            : undefined
-        ) || fallback.gallery.title,
-      subtitle:
-        normalizeString(
-          content.gallery && isRecord(content.gallery)
-            ? content.gallery.subtitle
-            : undefined
-        ) || fallback.gallery.subtitle,
-      body:
-        normalizeString(
-          content.gallery && isRecord(content.gallery)
-            ? content.gallery.body
-            : undefined
-        ) || fallback.gallery.body
+      title: normalizeEditableString(gallery, "title", fallback.gallery.title),
+      subtitle: normalizeEditableString(gallery, "subtitle", fallback.gallery.subtitle),
+      body: normalizeEditableString(gallery, "body", fallback.gallery.body)
     },
     contact: {
-      title:
-        normalizeString(
-          content.contact && isRecord(content.contact)
-            ? content.contact.title
-            : undefined
-        ) || fallback.contact.title,
-      subtitle:
-        normalizeString(
-          content.contact && isRecord(content.contact)
-            ? content.contact.subtitle
-            : undefined
-        ) || fallback.contact.subtitle,
-      body:
-        normalizeString(
-          content.contact && isRecord(content.contact)
-            ? content.contact.body
-            : undefined
-        ) || fallback.contact.body
+      title: normalizeEditableString(contact, "title", fallback.contact.title),
+      subtitle: normalizeEditableString(contact, "subtitle", fallback.contact.subtitle),
+      body: normalizeEditableString(contact, "body", fallback.contact.body)
     }
   };
 }
@@ -786,8 +738,14 @@ async function loadPageContent(locale: Locale): Promise<PageContent> {
 
     const payload = (await response.json()) as PublicSalonPayload;
     const salon = payload.salon ?? {};
+    const salonRecord = isRecord(salon) ? salon : {};
     const siteContent = normalizeSiteContent(
-      locale === "en" ? salon.site_content_en ?? salon.site_content : salon.site_content,
+      getLocalizedEditableValue({
+        record: salonRecord,
+        locale,
+        bgKey: "site_content",
+        enKey: "site_content_en"
+      }),
       fallbackSiteContent
     );
 
@@ -813,24 +771,46 @@ async function loadPageContent(locale: Locale): Promise<PageContent> {
 
     return {
       salonName: normalizeString(salon.name) || fallback.salonName,
-      heroTitle:
-        normalizeString(
-          locale === "en" ? salon.hero_title_en ?? salon.hero_title : salon.hero_title
-        ) || fallbackHeroTitle,
-      heroSubtitle:
-        normalizeString(
-          locale === "en"
-            ? salon.hero_subtitle_en ?? salon.hero_subtitle
-            : salon.hero_subtitle
-        ) ||
-        normalizeString(locale === "en" ? salon.about_en ?? salon.about : salon.about) ||
-        fallbackHeroSubtitle,
+      heroTitle: normalizeLocalizedEditableString({
+        record: salonRecord,
+        locale,
+        bgKey: "hero_title",
+        enKey: "hero_title_en",
+        fallback: fallbackHeroTitle
+      }),
+      heroSubtitle: normalizeLocalizedEditableString({
+        record: salonRecord,
+        locale,
+        bgKey: "hero_subtitle",
+        enKey: "hero_subtitle_en",
+        fallback:
+          normalizeLocalizedEditableString({
+            record: salonRecord,
+            locale,
+            bgKey: "about",
+            enKey: "about_en",
+            fallback: ""
+          }) || fallbackHeroSubtitle
+      }),
       about:
-        normalizeString(locale === "en" ? salon.about_en ?? salon.about : salon.about) ||
-        siteContent.reformer.body,
+        normalizeLocalizedEditableString({
+          record: salonRecord,
+          locale,
+          bgKey: "about",
+          enKey: "about_en",
+          fallback: siteContent.reformer.body
+        }),
       faqItems: normalizeFaqItems(
-        locale === "en" ? salon.faq_items_en ?? salon.faq_items : salon.faq_items,
-        fallbackFaqs
+        getLocalizedEditableValue({
+          record: salonRecord,
+          locale,
+          bgKey: "faq_items",
+          enKey: "faq_items_en"
+        }),
+        fallbackFaqs,
+        locale === "en"
+          ? hasField(salonRecord, "faq_items_en") || hasField(salonRecord, "faq_items")
+          : hasField(salonRecord, "faq_items")
       ),
       siteContent,
       galleryImages,
@@ -856,6 +836,7 @@ export async function HomePage({ locale }: { locale: Locale }) {
 
   const copy = homeCopy[locale];
   const pageContent = await loadPageContent(locale);
+  const hasFaqItems = pageContent.faqItems.length > 0;
   const mapSrc = buildMapEmbedSrc({
     salonName: pageContent.salonName,
     address: pageContent.address,
@@ -903,6 +884,7 @@ export async function HomePage({ locale }: { locale: Locale }) {
       : null;
   const pricingImages =
     pageContent.galleryImages.length > 0 ? pageContent.galleryImages : getFallbackGalleryImages(locale);
+  const headerMapHref = pageContent.googleMapsUrl || "#map";
 
   return (
     <main>
@@ -923,20 +905,34 @@ export async function HomePage({ locale }: { locale: Locale }) {
           <a href="#reformer">{copy.nav.reformer}</a>
           <a href="#gallery">{copy.nav.gallery}</a>
           <a href="#pricing">{copy.nav.pricing}</a>
-          <a href="#faq">{copy.nav.faq}</a>
+          {hasFaqItems ? <a href="#faq">{copy.nav.faq}</a> : null}
           <a href="#contact">{copy.nav.contact}</a>
         </nav>
         <div className="header-actions">
+          <a
+            className="header-map-link"
+            href={headerMapHref}
+            target={pageContent.googleMapsUrl ? "_blank" : undefined}
+            rel={pageContent.googleMapsUrl ? "noreferrer" : undefined}
+            aria-label={copy.openMap}
+            title={copy.openMap}
+          >
+            <MapPinned size={18} strokeWidth={2} aria-hidden="true" />
+          </a>
           <div className="locale-switcher" aria-label={copy.localeLabel}>
+            <Languages size={15} strokeWidth={1.8} aria-hidden="true" />
             <Link
               href={localizedPath("bg")}
               className={locale === "bg" ? "is-active" : undefined}
+              aria-current={locale === "bg" ? "page" : undefined}
             >
               BG
             </Link>
+            <span aria-hidden="true">/</span>
             <Link
               href={localizedPath("en")}
               className={locale === "en" ? "is-active" : undefined}
+              aria-current={locale === "en" ? "page" : undefined}
             >
               EN
             </Link>
@@ -962,9 +958,9 @@ export async function HomePage({ locale }: { locale: Locale }) {
           <p>{pageContent.heroSubtitle}</p>
           <div className="hero__actions">
             <PrimaryBookingButton>{copy.bookCta}</PrimaryBookingButton>
-            <OpenGalleryButton>
+            <a className="btn btn-light" href="#gallery">
               {copy.learnMore}
-            </OpenGalleryButton>
+            </a>
           </div>
         </div>
       </section>
@@ -1147,21 +1143,6 @@ export async function HomePage({ locale }: { locale: Locale }) {
         ) : null}
       </section>
 
-      <section id="faq" className="faq-section">
-        <div className="section-copy section-copy--center">
-          <p className="section-label">{copy.nav.faq}</p>
-          <h2>{copy.faqTitle}</h2>
-        </div>
-        <div className="faq-list">
-          {pageContent.faqItems.map((item) => (
-            <details key={item.id}>
-              <summary>{item.question}</summary>
-              <p>{item.answer}</p>
-            </details>
-          ))}
-        </div>
-      </section>
-
       <section id="map" className="map-section" aria-label={`${pageContent.salonName} ${copy.mapLabel}`}>
         <div className="map-frame">
           <iframe
@@ -1172,6 +1153,23 @@ export async function HomePage({ locale }: { locale: Locale }) {
           />
         </div>
       </section>
+
+      {hasFaqItems ? (
+        <section id="faq" className="faq-section">
+          <div className="section-copy section-copy--center">
+            <p className="section-label">{copy.nav.faq}</p>
+            <h2>{copy.faqTitle}</h2>
+          </div>
+          <div className="faq-list">
+            {pageContent.faqItems.map((item) => (
+              <details key={item.id}>
+                <summary>{item.question}</summary>
+                <p>{item.answer}</p>
+              </details>
+            ))}
+          </div>
+        </section>
+      ) : null}
 
       <section id="booking" className="final-cta final-cta--booking">
         <p className="reservation-kicker">

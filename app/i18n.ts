@@ -24,7 +24,7 @@ export const homeCopy = {
     localeLabel: "Език",
     nav: {
       reformer: "Reformer Pilates",
-      gallery: "Gallery",
+      gallery: "Галерия",
       pricing: "Цени",
       faq: "FAQ",
       contact: "Контакт"
