@@ -1198,6 +1198,13 @@ export async function HomePage({ locale }: { locale: Locale }) {
 
       <footer id="contact" className="site-footer">
         <div className="site-footer__brand">
+          <Image
+            src="/reset-body-lab-logo.png"
+            alt={pageContent.salonName}
+            width={82}
+            height={82}
+            className="site-footer__logo"
+          />
           <span>{pageContent.salonName}</span>
           <p>{copy.footerTagline}</p>
         </div>
