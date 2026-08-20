@@ -913,11 +913,10 @@ export async function HomePage({ locale }: { locale: Locale }) {
           aria-label={`${pageContent.salonName} ${copy.headerHomeLabel}`}
         >
           <Image
-            src="/reset-body-lab-logo.png"
+            src="/reset-body-lab-logo.webp"
             alt={pageContent.salonName}
             width={78}
             height={78}
-            priority
           />
         </a>
         <nav aria-label={copy.localeLabel}>
@@ -951,7 +950,7 @@ export async function HomePage({ locale }: { locale: Locale }) {
       <section id="top" className="hero">
         <Image
           className="hero__image"
-          src="/reset-body-lab-hero.jpg"
+          src="/reset-body-lab-hero.webp"
           alt={`${copy.heroImageAltPrefix} ${pageContent.salonName}`}
           fill
           sizes="100vw"
@@ -1195,7 +1194,7 @@ export async function HomePage({ locale }: { locale: Locale }) {
       <footer id="contact" className="site-footer">
         <div className="site-footer__brand">
           <Image
-            src="/reset-body-lab-logo.png"
+            src="/reset-body-lab-logo.webp"
             alt={pageContent.salonName}
             width={82}
             height={82}
@@ -1227,7 +1226,7 @@ export async function HomePage({ locale }: { locale: Locale }) {
                   <span
                     key={`footer-${item.label}`}
                     className="social-link social-link--icon social-link--placeholder"
-                    aria-label={item.label}
+                    aria-hidden="true"
                   >
                     {item.icon}
                   </span>
