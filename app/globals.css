@@ -901,7 +901,8 @@ p {
   margin-top: 0;
 }
 
-.reservation-section {
+.reservation-section,
+.final-cta--booking {
   width: 100%;
   max-width: none;
   padding-top: clamp(42px, 5vw, 70px);
@@ -927,7 +928,7 @@ p {
   align-items: center;
   max-width: none;
   padding: 26px 0;
-  border-top: 1px solid rgba(255, 255, 255, 0.82);
+  border-top: 1px solid rgba(95, 115, 84, 0.72);
 }
 
 .reservation-copy .section-label,
@@ -949,14 +950,23 @@ p {
 
 .reservation-actions .btn {
   min-width: 116px;
-  border: 1px solid rgba(58, 42, 40, 0.55);
-  background: rgba(255, 255, 255, 0.18);
-  color: #3a2a28;
-  box-shadow: 0 10px 22px rgba(58, 42, 40, 0.14);
+  border: 0;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.01) 34%),
+    linear-gradient(180deg, var(--booking-accent) 0%, var(--booking-accent-strong) 100%);
+  color: #ffffff;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.16),
+    0 14px 30px var(--primary-shadow);
 }
 
 .reservation-actions .btn:hover {
-  background: rgba(255, 255, 255, 0.34);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.01) 34%),
+    linear-gradient(180deg, #66795b 0%, var(--primary-hover) 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    0 16px 32px rgba(86, 105, 76, 0.34);
 }
 
 .gallery-section {
@@ -1396,6 +1406,16 @@ p {
   gap: 0;
 }
 
+.final-cta--booking {
+  place-items: stretch;
+  text-align: initial;
+}
+
+.final-cta--booking .reservation-kicker {
+  max-width: none;
+  margin-bottom: 28px;
+}
+
 .final-cta h2,
 .final-cta p {
   max-width: 760px;
@@ -1407,6 +1427,10 @@ p {
 
 .final-cta .btn {
   margin-top: 24px;
+}
+
+.final-cta--booking .btn {
+  margin-top: 0;
 }
 
 .return-page {

@@ -1094,27 +1094,6 @@ export async function HomePage({ locale }: { locale: Locale }) {
         </div>
       </section>
 
-      <section id="booking" className="reservation-section">
-        <p className="reservation-kicker">
-          {locale === "bg"
-            ? "Готова ли си да започнеш? Запази място сега:"
-            : "Ready to begin? Reserve your place now:"}
-        </p>
-        <div className="reservation-panel">
-          <div className="section-copy section-copy--center reservation-copy">
-            <p className="section-label">{copy.bookingLabel}</p>
-            <h2>{copy.bookingTitle}</h2>
-            <p>{copy.bookingBody}</p>
-            <div className="reservation-actions">
-              <PrimaryBookingButton>{locale === "bg" ? "Запази час" : "Book session"}</PrimaryBookingButton>
-              <a className="btn btn-light" href="#pricing">
-                {copy.pricingLabel}
-              </a>
-            </div>
-          </div>
-        </div>
-      </section>
-
       <section id="gallery" className="gallery-section">
         <div className="gallery-section__copy section-copy section-copy--center">
           {pageContent.siteContent.gallery.subtitle ? (
@@ -1199,10 +1178,22 @@ export async function HomePage({ locale }: { locale: Locale }) {
         </div>
       </section>
 
-      <section className="final-cta">
-        <h2>{copy.finalCtaTitle}</h2>
-        <p>{copy.finalCtaBody}</p>
-        <PrimaryBookingButton>{copy.bookCta}</PrimaryBookingButton>
+      <section id="booking" className="final-cta final-cta--booking">
+        <p className="reservation-kicker">
+          {locale === "bg"
+            ? "Готова ли си да започнеш? Запази място сега:"
+            : "Ready to begin? Reserve your place now:"}
+        </p>
+        <div className="reservation-panel">
+          <div className="section-copy section-copy--center reservation-copy">
+            <p className="section-label">{copy.bookingLabel}</p>
+            <h2>{copy.bookingTitle}</h2>
+            <p>{copy.bookingBody}</p>
+            <div className="reservation-actions">
+              <PrimaryBookingButton>{locale === "bg" ? "Запази час" : "Book session"}</PrimaryBookingButton>
+            </div>
+          </div>
+        </div>
       </section>
 
       <footer id="contact" className="site-footer">
