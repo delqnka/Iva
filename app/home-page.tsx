@@ -1202,12 +1202,11 @@ export async function HomePage({ locale }: { locale: Locale }) {
             : "Ready to begin? Reserve your place now:"}
         </p>
         <div className="reservation-panel">
-          <div className="section-copy section-copy--center reservation-copy">
-            <p className="section-label">{copy.bookingLabel}</p>
-            <h2>{copy.bookingTitle}</h2>
-            <p>{copy.bookingBody}</p>
+          <div className="section-copy section-copy--center reservation-copy reservation-copy--button-only">
             <div className="reservation-actions">
-              <PrimaryBookingButton>{locale === "bg" ? "Запази час" : "Book session"}</PrimaryBookingButton>
+              <PrimaryBookingButton className="btn-mint">
+                {locale === "bg" ? "Запази час" : "Book session"}
+              </PrimaryBookingButton>
             </div>
           </div>
         </div>
