@@ -661,6 +661,16 @@ function getPricingButtonLabel(item: SiteContentPriceItem, locale: Locale) {
   return locale === "bg" ? "Купи пакет" : "Buy package";
 }
 
+function isComingSoonPricingItem(item: SiteContentPriceItem) {
+  const normalizedName = item.name.toLowerCase();
+  return (
+    normalizedName.includes("8 посещения") ||
+    normalizedName.includes("12 посещения") ||
+    normalizedName.includes("8 visits") ||
+    normalizedName.includes("12 visits")
+  );
+}
+
 function normalizeSiteContent(raw: unknown, fallback: SiteContent) {
   const content = isRecord(raw) ? raw : {};
   const benefits = content.benefits && isRecord(content.benefits) ? content.benefits : {};
@@ -1222,9 +1232,13 @@ export async function HomePage({ locale }: { locale: Locale }) {
         <div className="pricing-grid">
           {pageContent.siteContent.pricing.items.map((item, index) => {
             const pricingImage = pricingImages[index % pricingImages.length];
+            const isComingSoon = isComingSoonPricingItem(item);
 
             return (
-              <article key={item.id} className="pricing-card">
+              <article
+                key={item.id}
+                className={`pricing-card${isComingSoon ? " pricing-card--coming-soon" : ""}`}
+              >
                 <div className="pricing-card__image">
                   <Image
                     src={pricingImage.src}
@@ -1233,18 +1247,27 @@ export async function HomePage({ locale }: { locale: Locale }) {
                     height={560}
                     sizes="(max-width: 820px) 100vw, 33vw"
                   />
+                  {isComingSoon ? (
+                    <span className="pricing-card__badge">Coming soon...</span>
+                  ) : null}
                 </div>
                 <div className="pricing-copy">
                   <h3>{item.name}</h3>
                   <p>{item.text}</p>
                 </div>
                 {item.price ? <p className="price">{item.price}</p> : null}
-                <PrimaryBookingButton
-                  className="btn-compact"
-                  service={item.serviceId || undefined}
-                >
-                  {getPricingButtonLabel(item, locale)}
-                </PrimaryBookingButton>
+                {isComingSoon ? (
+                  <span className="btn btn-compact pricing-card__disabled-action">
+                    Coming soon...
+                  </span>
+                ) : (
+                  <PrimaryBookingButton
+                    className="btn-compact"
+                    service={item.serviceId || undefined}
+                  >
+                    {getPricingButtonLabel(item, locale)}
+                  </PrimaryBookingButton>
+                )}
               </article>
             );
           })}
