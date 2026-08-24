@@ -411,6 +411,83 @@ function isRecord(value: unknown): value is Record<string, unknown> {
   return Boolean(value) && typeof value === "object" && !Array.isArray(value);
 }
 
+const WORKING_DAY_ORDER = [
+  "monday",
+  "tuesday",
+  "wednesday",
+  "thursday",
+  "friday",
+  "saturday",
+  "sunday"
+] as const;
+
+const WORKING_DAY_LABELS: Record<Locale, Record<(typeof WORKING_DAY_ORDER)[number], string>> = {
+  bg: {
+    monday: "Понеделник",
+    tuesday: "Вторник",
+    wednesday: "Сряда",
+    thursday: "Четвъртък",
+    friday: "Петък",
+    saturday: "Събота",
+    sunday: "Неделя"
+  },
+  en: {
+    monday: "Monday",
+    tuesday: "Tuesday",
+    wednesday: "Wednesday",
+    thursday: "Thursday",
+    friday: "Friday",
+    saturday: "Saturday",
+    sunday: "Sunday"
+  }
+};
+
+function normalizeTime(value: unknown) {
+  return typeof value === "string" ? value.trim() : "";
+}
+
+function formatDayRange(
+  days: Array<(typeof WORKING_DAY_ORDER)[number]>,
+  locale: Locale
+) {
+  const labels = WORKING_DAY_LABELS[locale];
+  if (days.length === 1) return labels[days[0]];
+  const start = labels[days[0]];
+  const end = labels[days[days.length - 1]];
+  return `${start} - ${end}`;
+}
+
+function formatWorkingHours(value: unknown, locale: Locale) {
+  const text = normalizeString(value);
+  if (text) return text;
+  if (!isRecord(value)) return "";
+
+  const groups: Array<{
+    days: Array<(typeof WORKING_DAY_ORDER)[number]>;
+    open: string;
+    close: string;
+  }> = [];
+
+  for (const day of WORKING_DAY_ORDER) {
+    const rawDay = value[day];
+    if (!isRecord(rawDay) || rawDay.closed === true) continue;
+    const open = normalizeTime(rawDay.open);
+    const close = normalizeTime(rawDay.close);
+    if (!open || !close) continue;
+
+    const last = groups[groups.length - 1];
+    if (last && last.open === open && last.close === close) {
+      last.days.push(day);
+    } else {
+      groups.push({ days: [day], open, close });
+    }
+  }
+
+  return groups
+    .map((group) => `${formatDayRange(group.days, locale)} · ${group.open} - ${group.close}`)
+    .join("; ");
+}
+
 function hasField(record: Record<string, unknown>, key: string) {
   return Object.prototype.hasOwnProperty.call(record, key);
 }
@@ -853,8 +930,9 @@ async function loadPageContent(locale: Locale): Promise<PageContent> {
       email: normalizeString(salon.email),
       city: normalizeString(salon.city),
       address: normalizeString(salon.address),
-      workingHours: normalizeString(
-        locale === "en" ? salon.working_hours_en ?? salon.working_hours : salon.working_hours
+      workingHours: formatWorkingHours(
+        locale === "en" ? salon.working_hours_en ?? salon.working_hours : salon.working_hours,
+        locale
       ),
       googleMapsUrl: normalizeString(salon.google_maps_url),
       instagramUsername: normalizeString(salon.instagram_username),
