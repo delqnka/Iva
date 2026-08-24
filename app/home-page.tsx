@@ -682,15 +682,26 @@ function toGalleryImageSrc(src: string, version?: string) {
 }
 
 function buildMapEmbedSrc({
-  salonName,
   address,
-  city
+  city,
+  googleMapsUrl
 }: {
-  salonName: string;
   address: string;
   city: string;
+  googleMapsUrl: string;
 }) {
-  const query = [salonName, address, city].filter(Boolean).join(", ");
+  let googleMapsQuery = "";
+  try {
+    const url = googleMapsUrl ? new URL(googleMapsUrl) : null;
+    googleMapsQuery =
+      url?.searchParams.get("query") ||
+      url?.searchParams.get("q") ||
+      "";
+  } catch {
+    googleMapsQuery = "";
+  }
+
+  const query = googleMapsQuery.trim() || [address, city].filter(Boolean).join(", ");
   return `https://www.google.com/maps?q=${encodeURIComponent(
     query || "Reset Body Lab Pilates"
   )}&output=embed`;
@@ -862,9 +873,9 @@ export async function HomePage({ locale }: { locale: Locale }) {
   const pageContent = await loadPageContent(locale);
   const hasFaqItems = pageContent.faqItems.length > 0;
   const mapSrc = buildMapEmbedSrc({
-    salonName: pageContent.salonName,
     address: pageContent.address,
-    city: pageContent.city
+    city: pageContent.city,
+    googleMapsUrl: pageContent.googleMapsUrl
   });
   const contactLines = [
     pageContent.address,
