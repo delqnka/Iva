@@ -781,7 +781,7 @@ function buildMapEmbedSrc({
   const query = googleMapsQuery.trim() || [address, city].filter(Boolean).join(", ");
   return `https://www.google.com/maps?q=${encodeURIComponent(
     query || "Reset Body Lab Pilates"
-  )}&output=embed`;
+  )}&z=17&output=embed`;
 }
 
 function toSocialUrl(
@@ -1264,6 +1264,14 @@ export async function HomePage({ locale }: { locale: Locale }) {
             loading="lazy"
             referrerPolicy="no-referrer-when-downgrade"
           />
+          <div className="map-location-callout" aria-hidden="true">
+            <div className="map-location-card">
+              <strong>{pageContent.salonName}</strong>
+              <span>{locale === "bg" ? "Ние сме тук" : "We are here"}</span>
+            </div>
+            <span className="map-location-arrow" />
+            <span className="map-location-dot" />
+          </div>
         </div>
       </section>
 
