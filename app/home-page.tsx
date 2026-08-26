@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { GalleryPreview } from "./gallery-preview";
-import { PrimaryBookingButton } from "./booking-actions";
+import { matPilatesServiceId, primaryServiceId, PrimaryBookingButton } from "./booking-actions";
 import { homeCopy, isLocale, type Locale, localizedPath } from "./i18n";
 
 type FaqItem = {
@@ -20,6 +20,7 @@ type GalleryImage = {
 
 type ServiceDetail = {
   id: string;
+  bookingServiceId: string;
   title: string;
   label: string;
   intro: string;
@@ -675,6 +676,7 @@ function getServiceDetails(locale: Locale): ServiceDetail[] {
     return [
       {
         id: "reformer-bed",
+        bookingServiceId: primaryServiceId,
         title: "Reformer Pilates",
         label: "Reformer bed",
         intro:
@@ -690,6 +692,7 @@ function getServiceDetails(locale: Locale): ServiceDetail[] {
       },
       {
         id: "mat-pilates",
+        bookingServiceId: matPilatesServiceId,
         title: "Mat Pilates",
         label: "Mat class",
         intro:
@@ -709,6 +712,7 @@ function getServiceDetails(locale: Locale): ServiceDetail[] {
   return [
     {
       id: "reformer-bed",
+      bookingServiceId: primaryServiceId,
       title: "Реформър пилатес на легло",
       label: "Тренировка на реформър",
       intro:
@@ -724,6 +728,7 @@ function getServiceDetails(locale: Locale): ServiceDetail[] {
     },
     {
       id: "mat-pilates",
+      bookingServiceId: matPilatesServiceId,
       title: "Пилатес на постелка",
       label: "Тренировка на постелка",
       intro:
@@ -1075,14 +1080,22 @@ export async function HomePage({ locale }: { locale: Locale }) {
     }
   ];
   const reformerSubtitle =
-    locale === "bg" && pageContent.siteContent.reformer.subtitle.trim() === "Reformer Pilates"
-      ? ""
-      : pageContent.siteContent.reformer.subtitle;
+    locale === "bg" ? "" : pageContent.siteContent.reformer.subtitle;
+  const reformerTitle =
+    locale === "bg"
+      ? pageContent.siteContent.reformer.title
+          .replace(/реформер/gi, "реформър")
+          .replace(/\s+\?/g, "?")
+      : pageContent.siteContent.reformer.title;
+  const reformerBody =
+    locale === "bg"
+      ? pageContent.siteContent.reformer.body.replace(/Reformer Pilates/g, "Реформър пилатес")
+      : pageContent.siteContent.reformer.body;
   const reformerEmphasis =
     "Тренировките могат лесно да се адаптират както за начинаещи, така и за хора с повече опит.";
   const reformerBodyParts =
-    locale === "bg" && pageContent.siteContent.reformer.body.includes(reformerEmphasis)
-      ? pageContent.siteContent.reformer.body.split(reformerEmphasis)
+    locale === "bg" && reformerBody.includes(reformerEmphasis)
+      ? reformerBody.split(reformerEmphasis)
       : null;
   const serviceDetails = getServiceDetails(locale);
   const pricingImages =
@@ -1228,7 +1241,7 @@ export async function HomePage({ locale }: { locale: Locale }) {
           </div>
           <div className="section-copy split-section__copy">
           {reformerSubtitle ? <p className="section-label">{reformerSubtitle}</p> : null}
-          <h2>{pageContent.siteContent.reformer.title}</h2>
+          <h2>{reformerTitle}</h2>
           <p>
             {reformerBodyParts ? (
               <>
@@ -1237,7 +1250,7 @@ export async function HomePage({ locale }: { locale: Locale }) {
                 {reformerBodyParts[1]}
               </>
             ) : (
-              pageContent.siteContent.reformer.body
+              reformerBody
             )}
           </p>
           </div>
@@ -1278,7 +1291,7 @@ export async function HomePage({ locale }: { locale: Locale }) {
             />
           </div>
           <div className="section-copy split-section__copy">
-            <h2>{locale === "bg" ? "Тренировките включват:" : "Training includes:"}</h2>
+            <h2>{locale === "bg" ? "Тренировките са подходящи за:" : "Training is suitable for:"}</h2>
             <ul className="check-list">
               {pageContent.siteContent.audience.items.map((item) => (
                 <li key={item}>{item}</li>
@@ -1290,7 +1303,7 @@ export async function HomePage({ locale }: { locale: Locale }) {
 
       <section className="services-section" aria-labelledby="services-heading">
         <div className="section-copy section-copy--center services-section__intro">
-          <h2 id="services-heading">{locale === "bg" ? "Услуги в студиото" : "Studio services"}</h2>
+          <h2 id="services-heading">{locale === "bg" ? "Услугите на Reset body lab Варна" : "Reset Body Lab Varna services"}</h2>
           <p>
             {locale === "bg"
               ? "Избери тренировка според целта, нивото и начина, по който искаш да се движиш."
@@ -1305,12 +1318,28 @@ export async function HomePage({ locale }: { locale: Locale }) {
                 <h3>{service.title}</h3>
               </div>
               <p className="service-card__intro">{service.intro}</p>
-              <div className="service-card__body">
-                {service.paragraphs.map((paragraph) => (
-                  <p key={paragraph}>{paragraph}</p>
-                ))}
-              </div>
-              <p className="service-card__note">{service.note}</p>
+              <details className="service-card__details">
+                <summary>
+                  <span className="service-card__details-open">
+                    {locale === "bg" ? "Прочети повече" : "Read more"}
+                  </span>
+                  <span className="service-card__details-close">
+                    {locale === "bg" ? "Скрий" : "Hide"}
+                  </span>
+                </summary>
+                <div className="service-card__body">
+                  {service.paragraphs.map((paragraph) => (
+                    <p key={paragraph}>{paragraph}</p>
+                  ))}
+                </div>
+                <p className="service-card__note">{service.note}</p>
+              </details>
+              <PrimaryBookingButton
+                className="service-card__booking"
+                service={service.bookingServiceId}
+              >
+                {locale === "bg" ? `Запази ${service.title}` : `Book ${service.title}`}
+              </PrimaryBookingButton>
             </article>
           ))}
         </div>

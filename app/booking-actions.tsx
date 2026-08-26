@@ -3,11 +3,14 @@
 import { BookingButton } from "@clicka1/booking";
 import { bookingCardCopy, type Locale } from "./i18n";
 
-const primaryServiceId =
+export const primaryServiceId =
   !process.env.NEXT_PUBLIC_PRIMARY_SERVICE_ID ||
   ["pilates-reformer-50", "pilates-bed"].includes(process.env.NEXT_PUBLIC_PRIMARY_SERVICE_ID)
     ? "svc-msahydgc"
     : process.env.NEXT_PUBLIC_PRIMARY_SERVICE_ID;
+
+export const matPilatesServiceId =
+  process.env.NEXT_PUBLIC_MAT_SERVICE_ID?.trim() || "svc-mt7a168p";
 
 export function PrimaryBookingButton({
   children = "Запази час",

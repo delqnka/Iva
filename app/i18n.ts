@@ -23,7 +23,7 @@ export const homeCopy = {
   bg: {
     localeLabel: "Език",
     nav: {
-      reformer: "Reformer Pilates",
+      reformer: "Реформър пилатес",
       gallery: "Галерия",
       pricing: "Цени",
       faq: "FAQ",
@@ -45,7 +45,7 @@ export const homeCopy = {
       },
       {
         value: "5",
-        label: "reformer легла",
+        label: "реформър легла",
         detail: ""
       }
     ],
@@ -78,7 +78,7 @@ export const homeCopy = {
     workingHoursLabel: "Работно време",
     workingHoursValue: "Понеделник - събота · 09:00 - 19:00",
     finalCtaTitle: "Готова ли си да започнеш?",
-    finalCtaBody: "Избери свободен час и запази едно от петте reformer легла.",
+    finalCtaBody: "Избери свободен час и запази едно от петте реформър легла.",
     footerTagline:
       "Модерно студио за реформър пилатес с 5 легла, онлайн резервация и персонално внимание към всяка тренировка.",
     legalLinks: {
@@ -86,11 +86,11 @@ export const homeCopy = {
       terms: "Общи условия",
       cookies: "Бисквитки"
     },
-    galleryAltStudio: "Минималистично Reformer Pilates студио",
+    galleryAltStudio: "Минималистично студио за реформър пилатес",
     galleryAltDetail: "Pilates детайл от тренировка",
     galleryAltAtmosphere: "Reset Body Lab Pilates атмосфера",
     galleryImageAlt: "галерия",
-    heroImageAltPrefix: "Reformer Pilates тренировка в",
+    heroImageAltPrefix: "Реформър пилатес тренировка в",
     instructorsTeam: "екип",
     instructorsSupport: "Персонално внимание",
     instructorsSupportBody: "Корекция на техника"
@@ -206,11 +206,11 @@ export const mapConsentCopy = {
 
 export const bookingCardCopy = {
   bg: {
-    ariaLabel: "Резервирай Pilates reformer 50 минути",
-    topLabel: "Reformer Pilates",
+    ariaLabel: "Резервирай реформър пилатес 50 минути",
+    topLabel: "Реформър пилатес",
     topMeta: "Квартал Чайка, Варна",
     duration: "50 минути",
-    capacity: "5 reformer легла",
+    capacity: "5 реформър легла",
     body:
       "Малка група, ясен формат и директна онлайн резервация.",
     cta: "Запази час"
