@@ -21,6 +21,8 @@ type GalleryImage = {
 type ServiceDetail = {
   id: string;
   bookingServiceId: string;
+  imageSrc: string;
+  imageAlt: string;
   title: string;
   label: string;
   intro: string;
@@ -677,6 +679,8 @@ function getServiceDetails(locale: Locale): ServiceDetail[] {
       {
         id: "reformer-bed",
         bookingServiceId: primaryServiceId,
+        imageSrc: "/reformer-service.JPG",
+        imageAlt: "Reformer Pilates class at Reset Body Lab Varna",
         title: "Reformer Pilates",
         label: "Reformer bed",
         intro:
@@ -693,6 +697,8 @@ function getServiceDetails(locale: Locale): ServiceDetail[] {
       {
         id: "mat-pilates",
         bookingServiceId: matPilatesServiceId,
+        imageSrc: "/mat-service.JPG",
+        imageAlt: "Mat Pilates class at Reset Body Lab Varna",
         title: "Mat Pilates",
         label: "Mat class",
         intro:
@@ -713,6 +719,8 @@ function getServiceDetails(locale: Locale): ServiceDetail[] {
     {
       id: "reformer-bed",
       bookingServiceId: primaryServiceId,
+      imageSrc: "/reformer-service.JPG",
+      imageAlt: "Реформър пилатес на легло в Reset Body Lab Варна",
       title: "Реформър пилатес на легло",
       label: "Тренировка на реформър",
       intro:
@@ -729,6 +737,8 @@ function getServiceDetails(locale: Locale): ServiceDetail[] {
     {
       id: "mat-pilates",
       bookingServiceId: matPilatesServiceId,
+      imageSrc: "/mat-service.JPG",
+      imageAlt: "Пилатес на постелка в Reset Body Lab Варна",
       title: "Пилатес на постелка",
       label: "Тренировка на постелка",
       intro:
@@ -1313,6 +1323,15 @@ export async function HomePage({ locale }: { locale: Locale }) {
         <div className="services-grid">
           {serviceDetails.map((service) => (
             <article key={service.id} className="service-card">
+              <div className="service-card__image">
+                <Image
+                  src={service.imageSrc}
+                  alt={service.imageAlt}
+                  width={720}
+                  height={560}
+                  sizes="(max-width: 1040px) 100vw, 44vw"
+                />
+              </div>
               <div className="service-card__header">
                 <span>{service.label}</span>
                 <h3>{service.title}</h3>
