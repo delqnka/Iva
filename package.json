@@ -10,7 +10,7 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
-    "@clicka1/booking": "file:vendor/clicka1-booking-0.2.11.tgz",
+    "@clicka1/booking": "file:vendor/clicka1-booking-0.2.12.tgz",
     "lucide-react": "^0.468.0",
     "next": "^14.2.35",
     "react": "^18.3.1",
