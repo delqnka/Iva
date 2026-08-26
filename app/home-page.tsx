@@ -18,6 +18,15 @@ type GalleryImage = {
   version?: string;
 };
 
+type ServiceDetail = {
+  id: string;
+  title: string;
+  label: string;
+  intro: string;
+  paragraphs: string[];
+  note: string;
+};
+
 type SiteContentBenefitItem = {
   id: string;
   title: string;
@@ -156,7 +165,7 @@ function getFallbackFaqs(locale: Locale): FaqItem[] {
   return [
     {
       id: "fallback-faq-1",
-      question: "Подходящ ли е Reformer Pilates за начинаещи?",
+      question: "Подходящ ли е реформър пилатес за начинаещи?",
       answer:
         "Да. Тренировката може да се адаптира според опита, силата и мобилността на клиента."
     },
@@ -165,12 +174,12 @@ function getFallbackFaqs(locale: Locale): FaqItem[] {
       question: "Колко продължава една тренировка?",
       answer: "Стандартната процедура в Reset Body Lab е 50 минути."
     },
-    {
-      id: "fallback-faq-3",
-      question: "Колко места има в една група?",
-      answer:
-        "Студиото работи с 5 reformer легла, което помага групата да остане малка."
-    },
+      {
+        id: "fallback-faq-3",
+        question: "Колко места има в една група?",
+        answer:
+        "Студиото работи с 5 реформър легла, което помага групата да остане малка."
+      },
     {
       id: "fallback-faq-4",
       question: "Как да запазя час?",
@@ -297,7 +306,7 @@ function defaultSiteContent(locale: Locale): SiteContent {
   return {
     benefits: {
       title: "Ползи",
-      intro: "Шест ясни причини Reformer Pilates да се усеща едновременно ефективен, щадящ и устойчив като практика.",
+      intro: "Шест ясни причини реформър пилатес да се усеща едновременно ефективен, щадящ и устойчив като практика.",
       items: [
         {
           id: "benefit-1",
@@ -312,12 +321,12 @@ function defaultSiteContent(locale: Locale): SiteContent {
         {
           id: "benefit-3",
           title: "Балансирана тренировка за цялото тяло",
-          text: "На Reformer рядко работи само една мускулна група. Докато изпълняваш едно движение, тялото постоянно участва в поддържането на баланс и контрол – от корема и гърба до ръцете, краката и седалището."
+          text: "На реформър рядко работи само една мускулна група. Докато изпълняваш едно движение, тялото постоянно участва в поддържането на баланс и контрол - от корема и гърба до ръцете, краката и седалището."
         },
         {
           id: "benefit-4",
           title: "Ефективно натоварване без тежък удар върху ставите",
-          text: "Reformer позволява мускулите да работят интензивно, докато движенията остават плавни и контролирани. Това го прави подходящ за различни нива на физическа подготовка и за хора, които предпочитат по-щадящ начин на трениране."
+          text: "Реформърът позволява мускулите да работят интензивно, докато движенията остават плавни и контролирани. Това го прави подходящ за различни нива на физическа подготовка и за хора, които предпочитат по-щадящ начин на трениране."
         },
         {
           id: "benefit-5",
@@ -327,15 +336,15 @@ function defaultSiteContent(locale: Locale): SiteContent {
         {
           id: "benefit-6",
           title: "По-добра стойка и контрол над тялото",
-          text: "Reformer Pilates развива усещането за позицията и движението на тялото. С времето това може да помогне за по-добра стойка, баланс и по-осъзнато движение и извън студиото."
+          text: "Реформър пилатес развива усещането за позицията и движението на тялото. С времето това може да помогне за по-добра стойка, баланс и по-осъзнато движение и извън студиото."
         }
       ]
     },
     reformer: {
-      title: "Какво е риформър пилатес?",
-      subtitle: "Reformer Pilates",
+      title: "Какво е реформър пилатес?",
+      subtitle: "Реформър пилатес",
       body:
-        "Риформър пилатес съчетава контролирано движение и регулируемо съпротивление, за да натовари тялото ефективно, без излишен стрес върху ставите. Тренировките могат лесно да се адаптират както за начинаещи, така и за хора с повече опит."
+        "Реформър пилатес съчетава контролирано движение и регулируемо съпротивление, за да натовари тялото ефективно, без излишен стрес върху ставите. Тренировките могат лесно да се адаптират както за начинаещи, така и за хора с повече опит."
     },
     audience: {
       title: "За кого е подходящо?",
@@ -661,6 +670,76 @@ function getPricingButtonLabel(item: SiteContentPriceItem, locale: Locale) {
   return locale === "bg" ? "Купи пакет" : "Buy package";
 }
 
+function getServiceDetails(locale: Locale): ServiceDetail[] {
+  if (locale === "en") {
+    return [
+      {
+        id: "reformer-bed",
+        title: "Reformer Pilates",
+        label: "Reformer bed",
+        intro:
+          "Reformer Pilates at Reset Body Lab is a balanced, intelligent, and joint-friendly training method for strength, posture, and lighter movement.",
+        paragraphs: [
+          "Each class focuses on strength, stability, and mobility through controlled movement. The instructor gives clear guidance, with attention to technique, breathing, body alignment, and deep core activation.",
+          "The exercises gradually build strength and body control. The whole body works, with a special focus on the core, pelvis, glutes, and spine.",
+          "Reformer Pilates improves the way you move in daily life by supporting posture, balance, coordination, and long-term functional strength.",
+          "Classes are suitable for beginners and experienced clients. Every exercise can be adapted to the individual level so you can feel confident and comfortable."
+        ],
+        note:
+          "Note: Classes are not suitable for pregnant women unless the instructor confirms otherwise."
+      },
+      {
+        id: "mat-pilates",
+        title: "Mat Pilates",
+        label: "Mat class",
+        intro:
+          "Mat Pilates is a balanced and mindful practice that builds strength, stability, and a better connection with the body.",
+        paragraphs: [
+          "During class, you develop strength, mobility, and control through smooth, precise movement. The instructor guides you with clear cues and a focus on breathing, posture, and deep core activation.",
+          "The exercises are sequenced to gradually develop both physical strength and mindful control. The whole body works, with a special focus on the core, pelvis, glutes, and spine.",
+          "Mat Pilates supports better posture, balance, and long-term strength while bringing a sense of lightness, stability, and harmony.",
+          "Classes are suitable for all levels. Each exercise can be adapted to your individual ability, whether you are starting now or already have experience."
+        ],
+        note:
+          "Note: Classes are not suitable for pregnant women unless they are part of a specialised programme."
+      }
+    ];
+  }
+
+  return [
+    {
+      id: "reformer-bed",
+      title: "Реформър пилатес на легло",
+      label: "Тренировка на реформър",
+      intro:
+        "Реформър пилатес в Reset Body Lab е интелигентен, балансиран и щадящ метод на тренировка, който изгражда сила, подобрява стойката и създава усещане за лекота в движенията.",
+      paragraphs: [
+        "Всяка тренировка е създадена с фокус върху силата, стабилността и мобилността чрез контролирани и осъзнати движения. Ще получиш ясни насоки от инструктора, внимание към правилната техника и специален акцент върху дишането, подравняването на тялото и активирането на дълбоката коремна мускулатура.",
+        "Упражненията са подредени така, че постепенно да развиват силата и контрола върху тялото. Работи се върху всички основни мускулни групи, с особен фокус върху корема, таза, седалището и гръбначния стълб. Резултатът е тренировка, която зарежда с енергия, вместо да изтощава.",
+        "Реформър пилатес не е просто начин да тренираш. Това е метод, който подобрява начина, по който се движиш в ежедневието. Подобрява стойката, баланса и координацията, като ти помага да изградиш силно, стабилно и функционално тяло.",
+        "Заниманията са подходящи както за начинаещи, така и за хора с опит. Всички упражнения могат да бъдат адаптирани спрямо индивидуалното ниво на подготовка, за да се чувстваш уверен и комфортно по време на всяка тренировка."
+      ],
+      note:
+        "Забележка: Тренировките не са подходящи за бременни жени, освен ако не е указано друго от инструктора."
+    },
+    {
+      id: "mat-pilates",
+      title: "Пилатес на постелка",
+      label: "Тренировка на постелка",
+      intro:
+        "Пилатесът на постелка е балансирана и осъзната тренировка, която изгражда сила, стабилност и по-добра връзка с тялото.",
+      paragraphs: [
+        "По време на заниманията ще развиваш сила, мобилност и контрол чрез плавни и прецизни движения. Всяка тренировка следва внимателно подбрана последователност от упражнения, а инструкторът ще те насочва с ясни указания, поставяйки акцент върху правилното дишане, добрата стойка и активирането на дълбоката коремна мускулатура.",
+        "Упражненията са създадени така, че постепенно да развиват както физическата сила, така и осъзнатия контрол върху движенията. Работи се с цялото тяло, с особен фокус върху коремната мускулатура, таза, седалището и гръбначния стълб. Натоварването е ефективно, но щадящо, така че след всяка тренировка ще се чувстваш зареден с енергия, а не изтощен.",
+        "Пилатесът на постелка е създаден, за да подобри начина, по който се движиш в ежедневието. Той подпомага правилната стойка, развива баланса и изгражда дългосрочна сила, като същевременно носи усещане за лекота, стабилност и хармония.",
+        "Заниманията са подходящи за всички нива на подготовка. Всяко упражнение може да бъде адаптирано според индивидуалните възможности, така че да тренираш спокойно и уверено, независимо дали правиш първите си стъпки или вече имаш опит."
+      ],
+      note:
+        "Забележка: Тренировките не са подходящи за бременни жени, освен ако не се провеждат по специализирана програма."
+    }
+  ];
+}
+
 function isComingSoonPricingItem(item: SiteContentPriceItem) {
   const normalizedName = item.name.toLowerCase();
   return (
@@ -814,11 +893,11 @@ async function loadPageContent(locale: Locale): Promise<PageContent> {
   const fallbackHeroTitle =
     locale === "en"
       ? "Reformer Pilates for strength, posture, and lightness."
-      : "Reformer Pilates за сила, стойка и лекота.";
+      : "Реформър пилатес за сила, стойка и лекота.";
   const fallbackHeroSubtitle =
     locale === "en"
       ? "The session combines strength, control, stretch, and precise technique on a specialised reformer bed."
-      : "Тренировката съчетава сила, контрол, разтягане и прецизна техника върху специализирано reformer легло.";
+      : "Тренировката съчетава сила, контрол, разтягане и прецизна техника върху специализирано реформър легло.";
 
   const fallback = {
     salonName: "Reset Body Lab Pilates",
@@ -1005,6 +1084,7 @@ export async function HomePage({ locale }: { locale: Locale }) {
     locale === "bg" && pageContent.siteContent.reformer.body.includes(reformerEmphasis)
       ? pageContent.siteContent.reformer.body.split(reformerEmphasis)
       : null;
+  const serviceDetails = getServiceDetails(locale);
   const pricingImages =
     pageContent.galleryImages.length > 0 ? pageContent.galleryImages : getFallbackGalleryImages(locale);
   const headerMapHref = pageContent.googleMapsUrl || "#map";
@@ -1132,7 +1212,7 @@ export async function HomePage({ locale }: { locale: Locale }) {
           <h2>{locale === "bg" ? "Открий тренировките" : "Discover the training"}</h2>
           <span />
         </div>
-        <p>{locale === "bg" ? "по reformer pilates в Reset Body Lab" : "with reformer pilates at Reset Body Lab"}</p>
+        <p>{locale === "bg" ? "по реформър пилатес в Reset Body Lab" : "with reformer pilates at Reset Body Lab"}</p>
       </section>
 
       <section id="reformer" className="intro-section">
@@ -1205,6 +1285,34 @@ export async function HomePage({ locale }: { locale: Locale }) {
               ))}
             </ul>
           </div>
+        </div>
+      </section>
+
+      <section className="services-section" aria-labelledby="services-heading">
+        <div className="section-copy section-copy--center services-section__intro">
+          <h2 id="services-heading">{locale === "bg" ? "Услуги в студиото" : "Studio services"}</h2>
+          <p>
+            {locale === "bg"
+              ? "Избери тренировка според целта, нивото и начина, по който искаш да се движиш."
+              : "Choose the class that fits your goal, level, and preferred way of moving."}
+          </p>
+        </div>
+        <div className="services-grid">
+          {serviceDetails.map((service) => (
+            <article key={service.id} className="service-card">
+              <div className="service-card__header">
+                <span>{service.label}</span>
+                <h3>{service.title}</h3>
+              </div>
+              <p className="service-card__intro">{service.intro}</p>
+              <div className="service-card__body">
+                {service.paragraphs.map((paragraph) => (
+                  <p key={paragraph}>{paragraph}</p>
+                ))}
+              </div>
+              <p className="service-card__note">{service.note}</p>
+            </article>
+          ))}
         </div>
       </section>
 

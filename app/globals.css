@@ -519,6 +519,7 @@ p {
 .why-section,
 .details-section,
 .reservation-section,
+.services-section,
 .gallery-section,
 .pricing-section,
 .faq-section,
@@ -632,6 +633,7 @@ p {
 @media (min-width: 900px) {
   .intro-section .section-copy,
   .benefits-section .section-copy,
+  .services-section__intro,
   .gallery-section__copy,
   .reservation-copy,
   .pricing-section .section-copy,
@@ -672,6 +674,111 @@ p {
 .details-section {
   padding-top: clamp(22px, 3.5vw, 48px);
   padding-bottom: clamp(46px, 5vw, 70px);
+}
+
+.services-section {
+  display: grid;
+  gap: clamp(28px, 4vw, 46px);
+  padding-top: clamp(70px, 8vw, 108px);
+  background:
+    radial-gradient(circle at 16% 14%, rgba(132, 144, 120, 0.14), transparent 34%),
+    radial-gradient(circle at 86% 24%, rgba(219, 205, 185, 0.26), transparent 31%);
+}
+
+.services-section__intro {
+  max-width: 760px;
+}
+
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(18px, 2.8vw, 34px);
+}
+
+.service-card {
+  position: relative;
+  display: grid;
+  align-content: start;
+  gap: 18px;
+  min-height: 100%;
+  padding: clamp(24px, 3.5vw, 42px);
+  border: 1px solid rgba(255, 255, 255, 0.78);
+  border-radius: 18px;
+  background: rgba(255, 254, 250, 0.76);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.62),
+    0 24px 58px rgba(48, 42, 35, 0.07);
+}
+
+.service-card::before {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  width: 82px;
+  height: 82px;
+  border-radius: 999px;
+  content: "";
+  background: rgba(132, 144, 120, 0.12);
+}
+
+.service-card__header {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: 10px;
+}
+
+.service-card__header span {
+  width: fit-content;
+  padding: 7px 12px;
+  border: 1px solid rgba(102, 115, 109, 0.18);
+  border-radius: 999px;
+  color: var(--accent-dark);
+  background: rgba(132, 144, 120, 0.1);
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.service-card h3 {
+  max-width: 12ch;
+  margin: 0;
+  color: var(--text);
+  font-size: clamp(30px, 3.2vw, 46px);
+  font-weight: 390;
+  letter-spacing: -0.035em;
+  line-height: 0.98;
+}
+
+.service-card__intro {
+  max-width: 34rem;
+  margin: 0;
+  color: #334039;
+  font-size: clamp(17px, 1.45vw, 20px);
+  font-weight: 520;
+  line-height: 1.5;
+}
+
+.service-card__body {
+  display: grid;
+  gap: 14px;
+  padding-top: 4px;
+}
+
+.service-card__body p,
+.service-card__note {
+  margin: 0;
+  color: rgba(45, 37, 35, 0.78);
+  font-size: 15px;
+  line-height: 1.68;
+}
+
+.service-card__note {
+  margin-top: 2px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(102, 115, 109, 0.16);
+  color: rgba(45, 37, 35, 0.68);
+  font-size: 14px;
 }
 
 .details-list {
@@ -1985,6 +2092,7 @@ p {
   .why-section,
   .details-section,
   .reservation-section,
+  .services-section,
   .gallery-section,
   .pricing-section,
   .faq-section,
@@ -2062,6 +2170,14 @@ p {
 
   .benefit-stories {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .services-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .service-card h3 {
+    max-width: none;
   }
 
   .studio-facts .studio-fact-card {
@@ -2147,6 +2263,35 @@ p {
   .map-section {
     padding-right: 14px;
     padding-left: 14px;
+  }
+
+  .services-section {
+    gap: 24px;
+  }
+
+  .service-card {
+    padding: 24px 18px;
+    border-radius: 14px;
+  }
+
+  .service-card::before {
+    width: 58px;
+    height: 58px;
+  }
+
+  .service-card h3 {
+    font-size: 30px;
+    line-height: 1.02;
+  }
+
+  .service-card__intro {
+    font-size: 16px;
+  }
+
+  .service-card__body p,
+  .service-card__note {
+    font-size: 14px;
+    line-height: 1.62;
   }
 
   .map-frame,
