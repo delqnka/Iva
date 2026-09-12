@@ -10,6 +10,7 @@
   --primary-shadow: rgba(72, 90, 63, 0.34);
   --booking-accent: #849078;
   --booking-accent-strong: #5f7354;
+  --launch-surface: #f3e6c8;
   --muted: #696d64;
   --quiet: #8b8f84;
   --line: rgba(25, 26, 22, 0.12);
@@ -280,6 +281,21 @@ nav a:hover {
   font-weight: 600;
   letter-spacing: 0;
   text-transform: uppercase;
+}
+
+.hero__opening {
+  display: block;
+  width: 100%;
+  max-width: 800px;
+  margin: 30px auto 0;
+  color: var(--launch-surface);
+  font-size: clamp(40px, 6.8vw, 84px);
+  font-weight: 650;
+  line-height: 0.92;
+  letter-spacing: -0.045em;
+  text-align: center;
+  text-wrap: balance;
+  text-shadow: 0 3px 22px rgba(0, 0, 0, 0.42);
 }
 
 .section-label {

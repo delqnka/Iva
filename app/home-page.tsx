@@ -1179,7 +1179,6 @@ export async function HomePage({ locale }: { locale: Locale }) {
           priority
         />
         <div className="hero__copy">
-          <p className="eyebrow">{pageContent.salonName}</p>
           <h1>{pageContent.heroTitle}</h1>
           <p>{pageContent.heroSubtitle}</p>
           <div className="hero__actions">
@@ -1187,6 +1186,11 @@ export async function HomePage({ locale }: { locale: Locale }) {
             <a className="btn btn-light" href="#gallery">
               {copy.learnMore}
             </a>
+          </div>
+          <div className="hero__opening">
+            <time dateTime="2026-09-17">
+              {locale === "bg" ? "ОТВАРЯМЕ НА 17.09" : "OPENING 17.09"}
+            </time>
           </div>
         </div>
       </section>
