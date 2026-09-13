@@ -16,16 +16,19 @@ export function PrimaryBookingButton({
   children = "Запази час",
   variant = "dark",
   className = "",
-  service = primaryServiceId
+  service = primaryServiceId,
+  lockService = false
 }: {
   children?: React.ReactNode;
   variant?: "dark" | "light";
   className?: string;
   service?: string;
+  lockService?: boolean;
 }) {
   return (
     <BookingButton
       service={service}
+      lockService={lockService}
       className={`${variant === "dark" ? "btn btn-dark" : "btn btn-light"} ${className}`.trim()}
     >
       {children}

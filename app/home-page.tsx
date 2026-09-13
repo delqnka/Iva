@@ -1318,11 +1318,6 @@ export async function HomePage({ locale }: { locale: Locale }) {
       <section className="services-section" aria-labelledby="services-heading">
         <div className="section-copy section-copy--center services-section__intro">
           <h2 id="services-heading">{locale === "bg" ? "Услугите на Reset body lab Варна" : "Reset Body Lab Varna services"}</h2>
-          <p>
-            {locale === "bg"
-              ? "Избери тренировка според целта, нивото и начина, по който искаш да се движиш."
-              : "Choose the class that fits your goal, level, and preferred way of moving."}
-          </p>
         </div>
         <div className="services-grid">
           {serviceDetails.map((service) => (
@@ -1337,7 +1332,6 @@ export async function HomePage({ locale }: { locale: Locale }) {
                 />
               </div>
               <div className="service-card__header">
-                <span>{service.label}</span>
                 <h3>{service.title}</h3>
               </div>
               <p className="service-card__intro">{service.intro}</p>
@@ -1360,6 +1354,7 @@ export async function HomePage({ locale }: { locale: Locale }) {
               <PrimaryBookingButton
                 className="service-card__booking"
                 service={service.bookingServiceId}
+                lockService
               >
                 {locale === "bg" ? `Запази ${service.title}` : `Book ${service.title}`}
               </PrimaryBookingButton>

@@ -32,7 +32,12 @@ Configure these in the Clicka engine/admin, not in this client site:
 
 - 5 bookable reformer beds as the salon capacity/resource setup
 - 50-minute Pilates service duration
-- working hours, blocked times and staff/resources
+- staff members named `Йоанна`, `Ива`, and `Жени`
+- blocked dates/times and staff/resources
+- recurring class timetable by day, trainer and capacity
 - prices, deposits and cancellation rules
 
-This site only opens the booking modal and passes the selected service id.
+The recurring class timetable is managed from the Clicka admin panel in the
+working-hours settings. When the timetable has rows, the booking widget only
+exposes those class start times for the selected trainer; it does not generate
+intermediate times from the salon opening hours.
