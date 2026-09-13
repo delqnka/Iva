@@ -17,7 +17,7 @@ export function PrimaryBookingButton({
   variant = "dark",
   className = "",
   service = primaryServiceId,
-  lockService = false
+  lockService = true
 }: {
   children?: React.ReactNode;
   variant?: "dark" | "light";

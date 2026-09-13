@@ -2,6 +2,7 @@
 
 import { BookingProvider } from "@clicka1/booking";
 import "@clicka1/booking/styles.css";
+import { weeklyClassSchedule } from "./class-schedule";
 import { getLocaleFromPathname, localizedPath } from "./i18n";
 
 const bookingEngineUrl =
@@ -26,6 +27,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
       successUrl={`${siteUrl}${localizedPath(locale, "/booking/success")}`}
       cancelUrl={`${siteUrl}${localizedPath(locale, "/booking/cancel")}`}
       accentGradient="linear-gradient(135deg, #849078 0%, #5f7354 100%)"
+      classSchedule={weeklyClassSchedule}
     >
       {children}
     </BookingProvider>
