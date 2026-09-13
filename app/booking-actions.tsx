@@ -16,8 +16,8 @@ export function PrimaryBookingButton({
   children = "Запази час",
   variant = "dark",
   className = "",
-  service = primaryServiceId,
-  lockService = true
+  service,
+  lockService = false
 }: {
   children?: React.ReactNode;
   variant?: "dark" | "light";
