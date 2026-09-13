@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { GalleryPreview } from "./gallery-preview";
-import { matPilatesServiceId, primaryServiceId, PrimaryBookingButton } from "./booking-actions";
+import { PrimaryBookingButton } from "./booking-actions";
 import { homeCopy, isLocale, type Locale, localizedPath } from "./i18n";
 
 type FaqItem = {
@@ -16,18 +16,6 @@ type GalleryImage = {
   src: string;
   alt: string;
   version?: string;
-};
-
-type ServiceDetail = {
-  id: string;
-  bookingServiceId: string;
-  imageSrc: string;
-  imageAlt: string;
-  title: string;
-  label: string;
-  intro: string;
-  paragraphs: string[];
-  note: string;
 };
 
 type SiteContentBenefitItem = {
@@ -673,88 +661,6 @@ function getPricingButtonLabel(item: SiteContentPriceItem, locale: Locale) {
   return locale === "bg" ? "Купи пакет" : "Buy package";
 }
 
-function getServiceDetails(locale: Locale): ServiceDetail[] {
-  if (locale === "en") {
-    return [
-      {
-        id: "reformer-bed",
-        bookingServiceId: primaryServiceId,
-        imageSrc: "/reformer-service.JPG",
-        imageAlt: "Reformer Pilates class at Reset Body Lab Varna",
-        title: "Reformer Pilates",
-        label: "Reformer bed",
-        intro:
-          "Reformer Pilates at Reset Body Lab is a balanced, intelligent, and joint-friendly training method for strength, posture, and lighter movement.",
-        paragraphs: [
-          "Each class focuses on strength, stability, and mobility through controlled movement. The instructor gives clear guidance, with attention to technique, breathing, body alignment, and deep core activation.",
-          "The exercises gradually build strength and body control. The whole body works, with a special focus on the core, pelvis, glutes, and spine.",
-          "Reformer Pilates improves the way you move in daily life by supporting posture, balance, coordination, and long-term functional strength.",
-          "Classes are suitable for beginners and experienced clients. Every exercise can be adapted to the individual level so you can feel confident and comfortable."
-        ],
-        note:
-          "Note: Classes are not suitable for pregnant women unless the instructor confirms otherwise."
-      },
-      {
-        id: "mat-pilates",
-        bookingServiceId: matPilatesServiceId,
-        imageSrc: "/mat-service.JPG",
-        imageAlt: "Mat Pilates class at Reset Body Lab Varna",
-        title: "Mat Pilates",
-        label: "Mat class",
-        intro:
-          "Mat Pilates is a balanced and mindful practice that builds strength, stability, and a better connection with the body.",
-        paragraphs: [
-          "During class, you develop strength, mobility, and control through smooth, precise movement. The instructor guides you with clear cues and a focus on breathing, posture, and deep core activation.",
-          "The exercises are sequenced to gradually develop both physical strength and mindful control. The whole body works, with a special focus on the core, pelvis, glutes, and spine.",
-          "Mat Pilates supports better posture, balance, and long-term strength while bringing a sense of lightness, stability, and harmony.",
-          "Classes are suitable for all levels. Each exercise can be adapted to your individual ability, whether you are starting now or already have experience."
-        ],
-        note:
-          "Note: Classes are not suitable for pregnant women unless they are part of a specialised programme."
-      }
-    ];
-  }
-
-  return [
-    {
-      id: "reformer-bed",
-      bookingServiceId: primaryServiceId,
-      imageSrc: "/reformer-service.JPG",
-      imageAlt: "Реформър пилатес на легло в Reset Body Lab Варна",
-      title: "Реформър пилатес на легло",
-      label: "Тренировка на реформър",
-      intro:
-        "Реформър пилатес в Reset Body Lab е интелигентен, балансиран и щадящ метод на тренировка, който изгражда сила, подобрява стойката и създава усещане за лекота в движенията.",
-      paragraphs: [
-        "Всяка тренировка е създадена с фокус върху силата, стабилността и мобилността чрез контролирани и осъзнати движения. Ще получиш ясни насоки от инструктора, внимание към правилната техника и специален акцент върху дишането, подравняването на тялото и активирането на дълбоката коремна мускулатура.",
-        "Упражненията са подредени така, че постепенно да развиват силата и контрола върху тялото. Работи се върху всички основни мускулни групи, с особен фокус върху корема, таза, седалището и гръбначния стълб. Резултатът е тренировка, която зарежда с енергия, вместо да изтощава.",
-        "Реформър пилатес не е просто начин да тренираш. Това е метод, който подобрява начина, по който се движиш в ежедневието. Подобрява стойката, баланса и координацията, като ти помага да изградиш силно, стабилно и функционално тяло.",
-        "Заниманията са подходящи както за начинаещи, така и за хора с опит. Всички упражнения могат да бъдат адаптирани спрямо индивидуалното ниво на подготовка, за да се чувстваш уверен и комфортно по време на всяка тренировка."
-      ],
-      note:
-        "Забележка: Тренировките не са подходящи за бременни жени, освен ако не е указано друго от инструктора."
-    },
-    {
-      id: "mat-pilates",
-      bookingServiceId: matPilatesServiceId,
-      imageSrc: "/mat-service.JPG",
-      imageAlt: "Пилатес на постелка в Reset Body Lab Варна",
-      title: "Пилатес на постелка",
-      label: "Тренировка на постелка",
-      intro:
-        "Пилатесът на постелка е балансирана и осъзната тренировка, която изгражда сила, стабилност и по-добра връзка с тялото.",
-      paragraphs: [
-        "По време на заниманията ще развиваш сила, мобилност и контрол чрез плавни и прецизни движения. Всяка тренировка следва внимателно подбрана последователност от упражнения, а инструкторът ще те насочва с ясни указания, поставяйки акцент върху правилното дишане, добрата стойка и активирането на дълбоката коремна мускулатура.",
-        "Упражненията са създадени така, че постепенно да развиват както физическата сила, така и осъзнатия контрол върху движенията. Работи се с цялото тяло, с особен фокус върху коремната мускулатура, таза, седалището и гръбначния стълб. Натоварването е ефективно, но щадящо, така че след всяка тренировка ще се чувстваш зареден с енергия, а не изтощен.",
-        "Пилатесът на постелка е създаден, за да подобри начина, по който се движиш в ежедневието. Той подпомага правилната стойка, развива баланса и изгражда дългосрочна сила, като същевременно носи усещане за лекота, стабилност и хармония.",
-        "Заниманията са подходящи за всички нива на подготовка. Всяко упражнение може да бъде адаптирано според индивидуалните възможности, така че да тренираш спокойно и уверено, независимо дали правиш първите си стъпки или вече имаш опит."
-      ],
-      note:
-        "Забележка: Тренировките не са подходящи за бременни жени, освен ако не се провеждат по специализирана програма."
-    }
-  ];
-}
-
 function isComingSoonPricingItem(item: SiteContentPriceItem) {
   const normalizedName = item.name.toLowerCase();
   return (
@@ -1107,7 +1013,6 @@ export async function HomePage({ locale }: { locale: Locale }) {
     locale === "bg" && reformerBody.includes(reformerEmphasis)
       ? reformerBody.split(reformerEmphasis)
       : null;
-  const serviceDetails = getServiceDetails(locale);
   const pricingImages =
     pageContent.galleryImages.length > 0 ? pageContent.galleryImages : getFallbackGalleryImages(locale);
   const headerMapHref = pageContent.googleMapsUrl || "#map";
@@ -1312,54 +1217,6 @@ export async function HomePage({ locale }: { locale: Locale }) {
               ))}
             </ul>
           </div>
-        </div>
-      </section>
-
-      <section className="services-section" aria-labelledby="services-heading">
-        <div className="section-copy section-copy--center services-section__intro">
-          <h2 id="services-heading">{locale === "bg" ? "Услугите на Reset body lab Варна" : "Reset Body Lab Varna services"}</h2>
-        </div>
-        <div className="services-grid">
-          {serviceDetails.map((service) => (
-            <article key={service.id} className="service-card">
-              <div className="service-card__image">
-                <Image
-                  src={service.imageSrc}
-                  alt={service.imageAlt}
-                  width={720}
-                  height={560}
-                  sizes="(max-width: 1040px) 100vw, 44vw"
-                />
-              </div>
-              <div className="service-card__header">
-                <h3>{service.title}</h3>
-              </div>
-              <p className="service-card__intro">{service.intro}</p>
-              <details className="service-card__details">
-                <summary>
-                  <span className="service-card__details-open">
-                    {locale === "bg" ? "Прочети повече" : "Read more"}
-                  </span>
-                  <span className="service-card__details-close">
-                    {locale === "bg" ? "Скрий" : "Hide"}
-                  </span>
-                </summary>
-                <div className="service-card__body">
-                  {service.paragraphs.map((paragraph) => (
-                    <p key={paragraph}>{paragraph}</p>
-                  ))}
-                </div>
-                <p className="service-card__note">{service.note}</p>
-              </details>
-              <PrimaryBookingButton
-                className="service-card__booking"
-                service={service.bookingServiceId}
-                lockService
-              >
-                {locale === "bg" ? `Запази ${service.title}` : `Book ${service.title}`}
-              </PrimaryBookingButton>
-            </article>
-          ))}
         </div>
       </section>
 
