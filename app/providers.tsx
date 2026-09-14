@@ -28,6 +28,8 @@ export function Providers({ children }: { children: React.ReactNode }) {
       cancelUrl={`${siteUrl}${localizedPath(locale, "/booking/cancel")}`}
       accentGradient="linear-gradient(135deg, #849078 0%, #5f7354 100%)"
       classSchedule={weeklyClassSchedule}
+      classScheduleStartDate="2026-09-17"
+      staffProfileBasePath="/book"
     >
       {children}
     </BookingProvider>
