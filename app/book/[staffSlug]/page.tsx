@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { PrimaryBookingButton } from "../../booking-actions";
 import { loadStaffMember } from "../../staff";
 
 export default async function StaffProfilePage({
@@ -49,9 +50,9 @@ export default async function StaffProfilePage({
         </div>
 
         <div style={{ marginTop: 28, display: "flex", gap: 12, flexWrap: "wrap" }}>
-          <Link href="/#booking" style={{ borderRadius: 999, background: "#111", color: "#fff", padding: "13px 22px", textDecoration: "none", fontWeight: 700 }}>
+          <PrimaryBookingButton>
             Запази час
-          </Link>
+          </PrimaryBookingButton>
           <Link href="/" style={{ borderRadius: 999, background: "#fff", color: "#111", padding: "13px 22px", textDecoration: "none", fontWeight: 700, border: "1px solid rgba(0,0,0,0.12)" }}>
             Обратно към сайта
           </Link>

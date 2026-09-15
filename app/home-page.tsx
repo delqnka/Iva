@@ -6,6 +6,7 @@ import { GalleryPreview } from "./gallery-preview";
 import { PrimaryBookingButton } from "./booking-actions";
 import { homeCopy, isLocale, type Locale, localizedPath } from "./i18n";
 import { loadStaffMembers, type StaffMember } from "./staff";
+import { TeamSection } from "./team-section";
 
 type FaqItem = {
   id: string;
@@ -1245,42 +1246,7 @@ export async function HomePage({ locale }: { locale: Locale }) {
         />
       </section>
 
-      <section id="team" className="team-section">
-        <div className="section-copy section-copy--center team-section__copy">
-          <h2>{locale === "bg" ? "Нашият екип" : "Our team"}</h2>
-          <p>
-            {locale === "bg"
-              ? "Всяка тренировка се води от инструктор с внимание към техника, темпо и индивидуално усещане за тялото."
-              : "Each class is guided with attention to technique, pacing, and the individual feel of the body."}
-          </p>
-        </div>
-        <div className="team-grid">
-          {pageContent.staffMembers.map((member) => {
-            const profileHref = `/book/${encodeURIComponent(member.slug)}`;
-
-            return (
-              <article className="team-card" key={member.id || member.slug}>
-                <Link href={profileHref} className="team-card__avatar-link" aria-label={`Клас с ${member.name}`}>
-                  <span className="team-avatar">
-                    {member.avatarUrl ? (
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img src={member.avatarUrl} alt={member.name} />
-                    ) : (
-                      <span>{member.name.charAt(0)}</span>
-                    )}
-                  </span>
-                </Link>
-                <div className="team-card__content">
-                  <Link href={profileHref}>
-                    <h3>{member.name}</h3>
-                  </Link>
-                  <p className="team-card__role">{locale === "bg" ? "Инструктор" : "Instructor"}</p>
-                </div>
-              </article>
-            );
-          })}
-        </div>
-      </section>
+      <TeamSection staffMembers={pageContent.staffMembers} locale={locale} />
 
       <section id="pricing" className="pricing-section">
         <div className="section-copy section-copy--center">
