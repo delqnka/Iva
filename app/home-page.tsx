@@ -1247,12 +1247,7 @@ export async function HomePage({ locale }: { locale: Locale }) {
 
       <section id="team" className="team-section">
         <div className="section-copy section-copy--center team-section__copy">
-          <p className="section-label">{locale === "bg" ? "Нашият екип" : "Our team"}</p>
-          <h2>
-            {locale === "bg"
-              ? "Треньорките, които водят класовете."
-              : "The instructors guiding each class."}
-          </h2>
+          <h2>{locale === "bg" ? "Нашият екип" : "Our team"}</h2>
           <p>
             {locale === "bg"
               ? "Всяка тренировка се води от инструктор с внимание към техника, темпо и индивидуално усещане за тялото."
@@ -1261,11 +1256,6 @@ export async function HomePage({ locale }: { locale: Locale }) {
         </div>
         <div className="team-grid">
           {pageContent.staffMembers.map((member) => {
-            const bio =
-              member.bio?.trim() ||
-              (locale === "bg"
-                ? "Скоро ще добавим кратко био за тази треньорка."
-                : "A short instructor bio will be added soon.");
             const profileHref = `/book/${encodeURIComponent(member.slug)}`;
 
             return (
@@ -1281,13 +1271,11 @@ export async function HomePage({ locale }: { locale: Locale }) {
                   </span>
                 </Link>
                 <div className="team-card__content">
+                  <Link href={profileHref}>
+                    <h3>{member.name}</h3>
+                  </Link>
                   <p className="team-card__role">{locale === "bg" ? "Инструктор" : "Instructor"}</p>
-                  <h3>{member.name}</h3>
-                  <p>{bio}</p>
                 </div>
-                <Link href={profileHref} className="team-card__bio-link">
-                  {locale === "bg" ? "Виж био" : "View bio"}
-                </Link>
               </article>
             );
           })}
