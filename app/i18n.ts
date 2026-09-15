@@ -24,7 +24,7 @@ export const homeCopy = {
     localeLabel: "Език",
     nav: {
       reformer: "Реформър пилатес",
-      gallery: "Галерия",
+      gallery: "Студио",
       team: "Екип",
       pricing: "Цени",
       faq: "FAQ",
@@ -100,7 +100,7 @@ export const homeCopy = {
     localeLabel: "Language",
     nav: {
       reformer: "Reformer Pilates",
-      gallery: "Gallery",
+      gallery: "Studio",
       team: "Team",
       pricing: "Pricing",
       faq: "FAQ",

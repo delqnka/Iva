@@ -647,23 +647,6 @@ p {
   text-align: center;
 }
 
-@media (min-width: 900px) {
-  .intro-section .section-copy,
-  .benefits-section .section-copy,
-  .services-section__intro,
-  .gallery-section__copy,
-  .team-section__copy,
-  .reservation-copy,
-  .pricing-section .section-copy,
-  .faq-section .section-copy,
-  .final-cta h2,
-  .final-cta p {
-    margin-left: 0;
-    margin-right: auto;
-    text-align: left;
-  }
-}
-
 .section-copy > :last-child {
   margin-bottom: 0;
 }
@@ -1317,8 +1300,8 @@ p {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 118px;
-  height: 118px;
+  width: clamp(132px, 12vw, 156px);
+  height: clamp(132px, 12vw, 156px);
   overflow: hidden;
   border: 8px solid rgba(255, 255, 255, 0.78);
   border-radius: 999px;
@@ -1338,9 +1321,14 @@ p {
 
 .team-avatar > span {
   color: var(--accent-dark);
-  font-size: 42px;
+  font-size: clamp(46px, 4vw, 58px);
   font-weight: 520;
   line-height: 1;
+}
+
+.team-bio-modal .team-avatar {
+  width: clamp(150px, 16vw, 184px);
+  height: clamp(150px, 16vw, 184px);
 }
 
 .team-card__content {
@@ -1989,9 +1977,9 @@ p {
   border-radius: 999px;
   color: #ffffff;
   text-align: center;
-  background: #df2f27;
+  background: #5f7354;
   box-shadow:
-    0 18px 32px rgba(89, 22, 18, 0.26),
+    0 18px 32px rgba(73, 92, 64, 0.24),
     inset 0 1px 0 rgba(255, 255, 255, 0.22);
 }
 
@@ -2016,8 +2004,8 @@ p {
   height: 82px;
   margin-top: -1px;
   border-radius: 999px;
-  background: #df2f27;
-  box-shadow: 0 12px 20px rgba(89, 22, 18, 0.18);
+  background: #5f7354;
+  box-shadow: 0 12px 20px rgba(73, 92, 64, 0.18);
 }
 
 .map-location-arrow::after {
@@ -2026,8 +2014,8 @@ p {
   height: 18px;
   margin: 64px 0 0 -7px;
   content: "";
-  border-right: 4px solid #df2f27;
-  border-bottom: 4px solid #df2f27;
+  border-right: 4px solid #5f7354;
+  border-bottom: 4px solid #5f7354;
   transform: rotate(45deg);
 }
 
@@ -2037,10 +2025,10 @@ p {
   margin-top: -2px;
   border: 5px solid #ffffff;
   border-radius: 999px;
-  background: #df2f27;
+  background: #5f7354;
   box-shadow:
-    0 0 0 9px rgba(223, 47, 39, 0.18),
-    0 14px 22px rgba(89, 22, 18, 0.24);
+    0 0 0 9px rgba(95, 115, 84, 0.18),
+    0 14px 22px rgba(73, 92, 64, 0.24);
 }
 
 .final-cta {

@@ -256,23 +256,16 @@ function defaultSiteContent(locale: Locale): SiteContent {
         items: [
           {
             id: "price-1",
-            name: "Single visit",
+            name: "4-session package",
             price: "",
-            text: "A good option for a first class or a flexible schedule.",
+            text: "Coming soon. Validity: 30 days.",
             serviceId: ""
           },
           {
             id: "price-2",
-            name: "4-session package",
-            price: "",
-            text: "For a smooth start and a visible rhythm in your practice.",
-            serviceId: ""
-          },
-          {
-            id: "price-3",
             name: "8-session package",
             price: "",
-            text: "For consistency, better posture, and a steadier result.",
+            text: "Coming soon. Validity: 30 days.",
             serviceId: ""
           }
         ],
@@ -285,9 +278,10 @@ function defaultSiteContent(locale: Locale): SiteContent {
           "At Reset Body Lab, the focus stays on correct movement, calm pacing, and clear instruction."
       },
       gallery: {
-        title: "See the studio",
+        title: "Our studio",
         subtitle: "",
-        body: ""
+        body:
+          "Step into a calm atmosphere, modern setting, and professional Reformer equipment."
       },
       contact: {
         title: "Contact",
@@ -365,23 +359,16 @@ function defaultSiteContent(locale: Locale): SiteContent {
       items: [
         {
           id: "price-1",
-          name: "Единично посещение",
+          name: "Пакет 4 тренировки",
           price: "",
-          text: "Подходящо за първи час или гъвкав график.",
+          text: "Очаквайте скоро. Валидност: 30 дни.",
           serviceId: ""
         },
         {
           id: "price-2",
-          name: "Пакет 4 тренировки",
-          price: "",
-          text: "За плавен старт и видим ритъм в практиката.",
-          serviceId: ""
-        },
-        {
-          id: "price-3",
           name: "Пакет 8 тренировки",
           price: "",
-          text: "За постоянство, по-добра стойка и устойчив резултат.",
+          text: "Очаквайте скоро. Валидност: 30 дни.",
           serviceId: ""
         }
       ],
@@ -394,9 +381,10 @@ function defaultSiteContent(locale: Locale): SiteContent {
         "В Reset Body Lab вниманието е насочено към правилно движение, спокойно темпо и ясни инструкции."
     },
     gallery: {
-      title: "Виж студиото",
+      title: "Нашето студио",
       subtitle: "",
-      body: ""
+      body:
+        "Потопи се в спокойната атмосфера, модерната обстановка и професионалните реформър уреди."
     },
     contact: {
       title: "Контакти",
@@ -666,11 +654,16 @@ function getPricingButtonLabel(item: SiteContentPriceItem, locale: Locale) {
 
 function isComingSoonPricingItem(item: SiteContentPriceItem) {
   const normalizedName = item.name.toLowerCase();
+  const normalizedText = item.text.toLowerCase();
   return (
-    normalizedName.includes("8 посещения") ||
-    normalizedName.includes("12 посещения") ||
-    normalizedName.includes("8 visits") ||
-    normalizedName.includes("12 visits")
+    normalizedText.includes("очаквайте") ||
+    normalizedText.includes("coming soon") ||
+    normalizedName.includes("пакет 4") ||
+    normalizedName.includes("пакет 8") ||
+    normalizedName.includes("4 тренировки") ||
+    normalizedName.includes("8 тренировки") ||
+    normalizedName.includes("4-session") ||
+    normalizedName.includes("8-session")
   );
 }
 
@@ -1271,7 +1264,9 @@ export async function HomePage({ locale }: { locale: Locale }) {
                     sizes="(max-width: 820px) 100vw, 33vw"
                   />
                   {isComingSoon ? (
-                    <span className="pricing-card__badge">Coming soon...</span>
+                    <span className="pricing-card__badge">
+                      {locale === "bg" ? "Очаквайте скоро" : "Coming soon"}
+                    </span>
                   ) : null}
                 </div>
                 <div className="pricing-copy">
@@ -1280,9 +1275,14 @@ export async function HomePage({ locale }: { locale: Locale }) {
                 </div>
                 {item.price ? <p className="price">{item.price}</p> : null}
                 {isComingSoon ? (
-                  <span className="btn btn-compact pricing-card__disabled-action">
-                    Coming soon...
-                  </span>
+                  <button
+                    type="button"
+                    className="btn btn-compact pricing-card__disabled-action"
+                    disabled
+                    aria-disabled="true"
+                  >
+                    {locale === "bg" ? "Очаквайте скоро" : "Coming soon"}
+                  </button>
                 ) : (
                   <PrimaryBookingButton
                     className="btn-compact"
