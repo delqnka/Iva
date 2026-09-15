@@ -1471,7 +1471,7 @@ p {
   height: calc(100dvh - 40px);
   max-height: none;
   overflow: hidden;
-  padding: 56px 64px 32px;
+  padding: 52px 64px 32px;
 }
 
 .gallery-overlay__close {
@@ -1514,9 +1514,11 @@ p {
 .gallery-overlay__single {
   position: relative;
   display: grid;
+  grid-template-rows: minmax(0, 1fr);
+  width: 100%;
+  height: 100%;
   min-height: 0;
   justify-items: center;
-  gap: 14px;
 }
 
 .gallery-overlay__image-stage {
@@ -1526,28 +1528,30 @@ p {
   min-width: 0;
   height: 100%;
   min-height: 0;
+  overflow: hidden;
+  cursor: zoom-in;
 }
 
 .gallery-overlay__image-stage img {
   width: auto;
   height: auto;
   max-width: 100%;
-  max-height: calc(100dvh - 150px);
+  max-height: calc(100dvh - 112px);
   border-radius: 10px;
   object-fit: contain;
   box-shadow: 0 22px 60px rgba(25, 26, 22, 0.16);
 }
 
-.gallery-overlay__back {
-  justify-self: start;
-  padding: 8px 14px;
-  border: 1px solid rgba(72, 81, 68, 0.18);
-  border-radius: 999px;
-  background: rgba(255, 254, 250, 0.78);
-  color: var(--text);
-  font-size: 13px;
-  font-weight: 560;
-  cursor: pointer;
+.gallery-overlay__single--zoomed .gallery-overlay__image-stage {
+  place-items: start center;
+  overflow: auto;
+  cursor: zoom-out;
+}
+
+.gallery-overlay__single--zoomed .gallery-overlay__image-stage img {
+  width: min(180vw, 1700px);
+  max-width: none;
+  max-height: none;
 }
 
 .gallery-overlay__nav {
@@ -2939,7 +2943,7 @@ p {
   .gallery-overlay__panel--single {
     height: calc(100dvh - 20px);
     max-height: none;
-    padding: 50px 12px 18px;
+    padding: 48px 8px 12px;
   }
 
   .gallery-overlay__grid {
@@ -2947,13 +2951,13 @@ p {
     gap: 10px;
   }
 
-  .gallery-overlay__single {
-    gap: 10px;
+  .gallery-overlay__image-stage img {
+    max-height: calc(100dvh - 80px);
+    border-radius: 8px;
   }
 
-  .gallery-overlay__image-stage img {
-    max-height: calc(100dvh - 132px);
-    border-radius: 8px;
+  .gallery-overlay__single--zoomed .gallery-overlay__image-stage img {
+    width: 190vw;
   }
 
   .gallery-overlay__nav {

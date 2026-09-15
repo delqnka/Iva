@@ -41,6 +41,7 @@ export function GalleryPreview({
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+  const [isZoomed, setIsZoomed] = useState(false);
   const touchStartRef = useRef<{ x: number; y: number } | null>(null);
 
   useEffect(() => {
@@ -55,14 +56,17 @@ export function GalleryPreview({
   function closeGallery() {
     setIsOpen(false);
     setSelectedIndex(null);
+    setIsZoomed(false);
   }
 
   function openImage(index: number) {
     setSelectedIndex(index);
+    setIsZoomed(false);
     setIsOpen(true);
   }
 
   function showPreviousImage() {
+    setIsZoomed(false);
     setSelectedIndex((current) => {
       if (current == null || images.length === 0) return current;
       return (current - 1 + images.length) % images.length;
@@ -70,6 +74,7 @@ export function GalleryPreview({
   }
 
   function showNextImage() {
+    setIsZoomed(false);
     setSelectedIndex((current) => {
       if (current == null || images.length === 0) return current;
       return (current + 1) % images.length;
@@ -82,7 +87,7 @@ export function GalleryPreview({
   }
 
   function handleTouchEnd(event: React.TouchEvent<HTMLDivElement>) {
-    if (!touchStartRef.current || selectedIndex == null) return;
+    if (!touchStartRef.current || selectedIndex == null || isZoomed) return;
 
     const touch = event.changedTouches[0];
     const deltaX = touch.clientX - touchStartRef.current.x;
@@ -164,17 +169,10 @@ export function GalleryPreview({
             </button>
             {selectedImage ? (
               <div
-                className="gallery-overlay__single"
+                className={`gallery-overlay__single${isZoomed ? " gallery-overlay__single--zoomed" : ""}`}
                 onTouchStart={handleTouchStart}
                 onTouchEnd={handleTouchEnd}
               >
-                <button
-                  type="button"
-                  className="gallery-overlay__back"
-                  onClick={() => setSelectedIndex(null)}
-                >
-                  Всички снимки
-                </button>
                 <button
                   type="button"
                   className="gallery-overlay__nav gallery-overlay__nav--prev"
@@ -183,7 +181,19 @@ export function GalleryPreview({
                 >
                   <ChevronLeft size={26} strokeWidth={2} />
                 </button>
-                <div className="gallery-overlay__image-stage">
+                <div
+                  className="gallery-overlay__image-stage"
+                  role="button"
+                  tabIndex={0}
+                  aria-label={isZoomed ? "Намали снимката" : "Увеличи снимката"}
+                  onClick={() => setIsZoomed((current) => !current)}
+                  onKeyDown={(event) => {
+                    if (event.key === "Enter" || event.key === " ") {
+                      event.preventDefault();
+                      setIsZoomed((current) => !current);
+                    }
+                  }}
+                >
                   <Image
                     src={selectedImage.src}
                     alt={selectedImage.alt}
