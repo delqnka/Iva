@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { GalleryPreview } from "./gallery-preview";
 import { PrimaryBookingButton } from "./booking-actions";
 import { homeCopy, isLocale, type Locale, localizedPath } from "./i18n";
+import { loadStaffMembers, type StaffMember } from "./staff";
 
 type FaqItem = {
   id: string;
@@ -122,6 +123,7 @@ type PageContent = {
   instagramUsername: string;
   facebookUsername: string;
   tiktokUsername: string;
+  staffMembers: StaffMember[];
 };
 
 function getFallbackFaqs(locale: Locale): FaqItem[] {
@@ -836,7 +838,8 @@ async function loadPageContent(locale: Locale): Promise<PageContent> {
     googleMapsUrl: "",
     instagramUsername: "",
     facebookUsername: "",
-    tiktokUsername: ""
+    tiktokUsername: "",
+    staffMembers: await loadStaffMembers()
   };
 
   const engineUrl = process.env.NEXT_PUBLIC_ENGINE_URL?.trim() || "https://app.alternine.co";
@@ -858,7 +861,10 @@ async function loadPageContent(locale: Locale): Promise<PageContent> {
       throw new Error(`Salon fetch failed: ${response.status}`);
     }
 
-    const payload = (await response.json()) as PublicSalonPayload;
+    const [payload, staffMembers] = await Promise.all([
+      response.json() as Promise<PublicSalonPayload>,
+      loadStaffMembers()
+    ]);
     const salon = payload.salon ?? {};
     const salonRecord = isRecord(salon) ? salon : {};
     const siteContent = normalizeSiteContent(
@@ -947,7 +953,8 @@ async function loadPageContent(locale: Locale): Promise<PageContent> {
       googleMapsUrl: normalizeString(salon.google_maps_url),
       instagramUsername: normalizeString(salon.instagram_username),
       facebookUsername: normalizeString(salon.facebook_username),
-      tiktokUsername: normalizeString(salon.tiktok_username)
+      tiktokUsername: normalizeString(salon.tiktok_username),
+      staffMembers
     };
   } catch {
     return fallback;
@@ -1035,6 +1042,7 @@ export async function HomePage({ locale }: { locale: Locale }) {
         <nav aria-label={copy.localeLabel}>
           <a href="#reformer">{copy.nav.reformer}</a>
           <a href="#gallery">{copy.nav.gallery}</a>
+          <a href="#team">{copy.nav.team}</a>
           <a href="#pricing">{copy.nav.pricing}</a>
           {hasFaqItems ? <a href="#faq">{copy.nav.faq}</a> : null}
           <a href="#contact">{copy.nav.contact}</a>
@@ -1235,6 +1243,55 @@ export async function HomePage({ locale }: { locale: Locale }) {
           label={`${pageContent.salonName} ${copy.nav.gallery}`}
           moreLabel={locale === "bg" ? "Виж още" : "See more"}
         />
+      </section>
+
+      <section id="team" className="team-section">
+        <div className="section-copy section-copy--center team-section__copy">
+          <p className="section-label">{locale === "bg" ? "Нашият екип" : "Our team"}</p>
+          <h2>
+            {locale === "bg"
+              ? "Треньорките, които водят класовете."
+              : "The instructors guiding each class."}
+          </h2>
+          <p>
+            {locale === "bg"
+              ? "Всяка тренировка се води от инструктор с внимание към техника, темпо и индивидуално усещане за тялото."
+              : "Each class is guided with attention to technique, pacing, and the individual feel of the body."}
+          </p>
+        </div>
+        <div className="team-grid">
+          {pageContent.staffMembers.map((member) => {
+            const bio =
+              member.bio?.trim() ||
+              (locale === "bg"
+                ? "Скоро ще добавим кратко био за тази треньорка."
+                : "A short instructor bio will be added soon.");
+            const profileHref = `/book/${encodeURIComponent(member.slug)}`;
+
+            return (
+              <article className="team-card" key={member.id || member.slug}>
+                <Link href={profileHref} className="team-card__avatar-link" aria-label={`Клас с ${member.name}`}>
+                  <span className="team-avatar">
+                    {member.avatarUrl ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img src={member.avatarUrl} alt={member.name} />
+                    ) : (
+                      <span>{member.name.charAt(0)}</span>
+                    )}
+                  </span>
+                </Link>
+                <div className="team-card__content">
+                  <p className="team-card__role">{locale === "bg" ? "Инструктор" : "Instructor"}</p>
+                  <h3>{member.name}</h3>
+                  <p>{bio}</p>
+                </div>
+                <Link href={profileHref} className="team-card__bio-link">
+                  {locale === "bg" ? "Виж био" : "View bio"}
+                </Link>
+              </article>
+            );
+          })}
+        </div>
       </section>
 
       <section id="pricing" className="pricing-section">

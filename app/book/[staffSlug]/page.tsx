@@ -1,63 +1,12 @@
 import Link from "next/link";
-
-type StaffMember = {
-  id: string;
-  name: string;
-  slug: string;
-  bio: string | null;
-  avatarUrl: string | null;
-  serviceIds: string[];
-};
-
-type StaffResponse = {
-  staff?: StaffMember[];
-};
-
-const fallbackStaff: StaffMember[] = [
-  { id: "yoanna", name: "Йоанна", slug: "yoanna", bio: null, avatarUrl: null, serviceIds: [] },
-  { id: "iva", name: "Ива", slug: "iva", bio: null, avatarUrl: null, serviceIds: [] },
-  { id: "jeni", name: "Жени", slug: "zheni", bio: null, avatarUrl: null, serviceIds: [] }
-];
-
-function normalizeSlug(value: string): string {
-  return decodeURIComponent(value)
-    .trim()
-    .toLocaleLowerCase("bg-BG")
-    .replace(/\s+/g, "-");
-}
-
-async function getStaff(slug: string): Promise<StaffMember | null> {
-  const engineUrl = (process.env.NEXT_PUBLIC_ENGINE_URL || "https://app.alternine.co").replace(/\/$/, "");
-  const salonSlug = process.env.NEXT_PUBLIC_SALON_SLUG || "salon";
-  const apiKey = process.env.NEXT_PUBLIC_BOOKING_API_KEY;
-
-  try {
-    const response = await fetch(
-      `${engineUrl}/api/public/v1/salons/${encodeURIComponent(salonSlug)}/staff`,
-      {
-        cache: "no-store",
-        headers: apiKey ? { "X-API-Key": apiKey } : undefined
-      }
-    );
-    if (response.ok) {
-      const data = (await response.json()) as StaffResponse;
-      const staff = Array.isArray(data.staff) ? data.staff : [];
-      const match = staff.find((member) => normalizeSlug(member.slug) === normalizeSlug(slug));
-      if (match) return match;
-    }
-  } catch {
-    // The booking API may be unavailable during local development; fall back to known trainers.
-  }
-
-  return fallbackStaff.find((member) => normalizeSlug(member.slug) === normalizeSlug(slug)) ?? null;
-}
+import { loadStaffMember } from "../../staff";
 
 export default async function StaffProfilePage({
   params
 }: {
   params: { staffSlug: string };
 }) {
-  const staff = await getStaff(params.staffSlug);
+  const staff = await loadStaffMember(params.staffSlug);
 
   if (!staff) {
     return (

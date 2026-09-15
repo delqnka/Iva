@@ -25,6 +25,7 @@ export const homeCopy = {
     nav: {
       reformer: "Реформър пилатес",
       gallery: "Галерия",
+      team: "Екип",
       pricing: "Цени",
       faq: "FAQ",
       contact: "Контакт"
@@ -100,6 +101,7 @@ export const homeCopy = {
     nav: {
       reformer: "Reformer Pilates",
       gallery: "Gallery",
+      team: "Team",
       pricing: "Pricing",
       faq: "FAQ",
       contact: "Contact"
