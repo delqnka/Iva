@@ -1210,7 +1210,8 @@ p {
 .gallery-section__copy {
   max-width: 620px;
   margin-right: auto;
-  margin-left: 0;
+  margin-left: auto;
+  text-align: center;
 }
 
 .gallery-strip {
@@ -1464,6 +1465,15 @@ p {
   box-shadow: 0 26px 60px rgba(25, 26, 22, 0.14);
 }
 
+.gallery-overlay__panel--single {
+  display: grid;
+  width: min(100%, 1480px);
+  height: calc(100dvh - 40px);
+  max-height: none;
+  overflow: hidden;
+  padding: 56px 64px 32px;
+}
+
 .gallery-overlay__close {
   position: absolute;
   top: 12px;
@@ -1502,15 +1512,27 @@ p {
 }
 
 .gallery-overlay__single {
+  position: relative;
   display: grid;
+  min-height: 0;
   justify-items: center;
   gap: 14px;
 }
 
-.gallery-overlay__single img {
+.gallery-overlay__image-stage {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  min-width: 0;
+  height: 100%;
+  min-height: 0;
+}
+
+.gallery-overlay__image-stage img {
   width: auto;
+  height: auto;
   max-width: 100%;
-  max-height: calc(100dvh - 140px);
+  max-height: calc(100dvh - 150px);
   border-radius: 10px;
   object-fit: contain;
   box-shadow: 0 22px 60px rgba(25, 26, 22, 0.16);
@@ -1526,6 +1548,42 @@ p {
   font-size: 13px;
   font-weight: 560;
   cursor: pointer;
+}
+
+.gallery-overlay__nav {
+  position: absolute;
+  top: 50%;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 46px;
+  height: 46px;
+  border: 1px solid rgba(72, 81, 68, 0.18);
+  border-radius: 999px;
+  background: rgba(255, 254, 250, 0.88);
+  color: var(--text);
+  box-shadow: 0 12px 28px rgba(25, 26, 22, 0.14);
+  cursor: pointer;
+  transform: translateY(-50%);
+  transition:
+    background 180ms ease,
+    transform 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.gallery-overlay__nav:hover {
+  background: rgba(255, 254, 250, 1);
+  box-shadow: 0 16px 34px rgba(25, 26, 22, 0.18);
+  transform: translateY(-50%) scale(1.04);
+}
+
+.gallery-overlay__nav--prev {
+  left: 10px;
+}
+
+.gallery-overlay__nav--next {
+  right: 10px;
 }
 
 .service-card {
@@ -2823,6 +2881,12 @@ p {
     padding: 42px 0;
   }
 
+  .gallery-section__copy {
+    margin-right: auto;
+    margin-left: auto;
+    text-align: center;
+  }
+
   .reservation-kicker {
     text-align: left;
     letter-spacing: 0.08em;
@@ -2872,9 +2936,37 @@ p {
     padding: 42px 12px 12px;
   }
 
+  .gallery-overlay__panel--single {
+    height: calc(100dvh - 20px);
+    max-height: none;
+    padding: 50px 12px 18px;
+  }
+
   .gallery-overlay__grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 10px;
+  }
+
+  .gallery-overlay__single {
+    gap: 10px;
+  }
+
+  .gallery-overlay__image-stage img {
+    max-height: calc(100dvh - 132px);
+    border-radius: 8px;
+  }
+
+  .gallery-overlay__nav {
+    width: 40px;
+    height: 40px;
+  }
+
+  .gallery-overlay__nav--prev {
+    left: 4px;
+  }
+
+  .gallery-overlay__nav--next {
+    right: 4px;
   }
 
   .reservation-panel,

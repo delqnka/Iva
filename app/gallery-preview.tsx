@@ -1,8 +1,8 @@
 "use client";
 
-import { X } from "lucide-react";
+import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 type GalleryImage = {
   src: string;
@@ -41,6 +41,7 @@ export function GalleryPreview({
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+  const touchStartRef = useRef<{ x: number; y: number } | null>(null);
 
   useEffect(() => {
     const openGallery = () => {
@@ -61,7 +62,57 @@ export function GalleryPreview({
     setIsOpen(true);
   }
 
+  function showPreviousImage() {
+    setSelectedIndex((current) => {
+      if (current == null || images.length === 0) return current;
+      return (current - 1 + images.length) % images.length;
+    });
+  }
+
+  function showNextImage() {
+    setSelectedIndex((current) => {
+      if (current == null || images.length === 0) return current;
+      return (current + 1) % images.length;
+    });
+  }
+
+  function handleTouchStart(event: React.TouchEvent<HTMLDivElement>) {
+    const touch = event.touches[0];
+    touchStartRef.current = { x: touch.clientX, y: touch.clientY };
+  }
+
+  function handleTouchEnd(event: React.TouchEvent<HTMLDivElement>) {
+    if (!touchStartRef.current || selectedIndex == null) return;
+
+    const touch = event.changedTouches[0];
+    const deltaX = touch.clientX - touchStartRef.current.x;
+    const deltaY = touch.clientY - touchStartRef.current.y;
+    touchStartRef.current = null;
+
+    if (Math.abs(deltaX) < 48 || Math.abs(deltaX) < Math.abs(deltaY) * 1.25) return;
+
+    if (deltaX < 0) {
+      showNextImage();
+    } else {
+      showPreviousImage();
+    }
+  }
+
   const selectedImage = selectedIndex != null ? images[selectedIndex] : null;
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.key === "Escape") closeGallery();
+      if (selectedIndex == null) return;
+      if (event.key === "ArrowLeft") showPreviousImage();
+      if (event.key === "ArrowRight") showNextImage();
+    }
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isOpen, selectedIndex]);
 
   return (
     <>
@@ -99,7 +150,10 @@ export function GalleryPreview({
 
       {isOpen ? (
         <div className="gallery-overlay" role="dialog" aria-modal="true" onClick={closeGallery}>
-          <div className="gallery-overlay__panel" onClick={(event) => event.stopPropagation()}>
+          <div
+            className={`gallery-overlay__panel${selectedImage ? " gallery-overlay__panel--single" : ""}`}
+            onClick={(event) => event.stopPropagation()}
+          >
             <button
               type="button"
               className="gallery-overlay__close"
@@ -109,7 +163,11 @@ export function GalleryPreview({
               <X size={18} strokeWidth={2} />
             </button>
             {selectedImage ? (
-              <div className="gallery-overlay__single">
+              <div
+                className="gallery-overlay__single"
+                onTouchStart={handleTouchStart}
+                onTouchEnd={handleTouchEnd}
+              >
                 <button
                   type="button"
                   className="gallery-overlay__back"
@@ -117,14 +175,32 @@ export function GalleryPreview({
                 >
                   Всички снимки
                 </button>
-                <Image
-                  src={selectedImage.src}
-                  alt={selectedImage.alt}
-                  width={1800}
-                  height={2200}
-                  sizes="(max-width: 1040px) 100vw, 82vw"
-                  priority
-                />
+                <button
+                  type="button"
+                  className="gallery-overlay__nav gallery-overlay__nav--prev"
+                  aria-label="Предишна снимка"
+                  onClick={showPreviousImage}
+                >
+                  <ChevronLeft size={26} strokeWidth={2} />
+                </button>
+                <div className="gallery-overlay__image-stage">
+                  <Image
+                    src={selectedImage.src}
+                    alt={selectedImage.alt}
+                    width={2200}
+                    height={2600}
+                    sizes="100vw"
+                    priority
+                  />
+                </div>
+                <button
+                  type="button"
+                  className="gallery-overlay__nav gallery-overlay__nav--next"
+                  aria-label="Следваща снимка"
+                  onClick={showNextImage}
+                >
+                  <ChevronRight size={26} strokeWidth={2} />
+                </button>
               </div>
             ) : (
               <div className="gallery-overlay__grid">
