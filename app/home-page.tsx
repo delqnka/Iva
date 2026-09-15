@@ -1263,11 +1263,6 @@ export async function HomePage({ locale }: { locale: Locale }) {
                     height={560}
                     sizes="(max-width: 820px) 100vw, 33vw"
                   />
-                  {isComingSoon ? (
-                    <span className="pricing-card__badge">
-                      {locale === "bg" ? "Очаквайте скоро" : "Coming soon"}
-                    </span>
-                  ) : null}
                 </div>
                 <div className="pricing-copy">
                   <h3>{item.name}</h3>
