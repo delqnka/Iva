@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { BookingButton } from "@clicka1/booking";
 import type { StaffMember } from "./staff";
 
 function StaffAvatar({ member }: { member: StaffMember }) {
@@ -85,6 +86,13 @@ export function TeamSection({
                   ? "Скоро ще добавим кратко био за тази треньорка."
                   : "A short instructor bio will be added soon.")}
             </p>
+            <BookingButton
+              staffName={selectedMember.name}
+              className="btn btn-dark team-bio-modal__booking"
+              onClick={() => setSelectedMember(null)}
+            >
+              {isBg ? "Запази час" : "Book session"}
+            </BookingButton>
           </div>
         </div>
       ) : null}

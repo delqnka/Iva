@@ -1441,6 +1441,11 @@ p {
   white-space: pre-line;
 }
 
+.team-bio-modal__booking {
+  margin-top: 30px;
+  width: min(100%, 360px);
+}
+
 .gallery-overlay {
   position: fixed;
   inset: 0;
