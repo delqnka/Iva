@@ -129,6 +129,7 @@ type PageContent = {
   salonName: string;
   heroTitle: string;
   heroSubtitle: string;
+  heroImage: GalleryImage;
   about: string;
   faqItems: FaqItem[];
   siteContent: SiteContent;
@@ -931,6 +932,10 @@ export async function loadPageContent(locale: Locale): Promise<PageContent> {
     salonName: "Reset Body Lab Pilates",
     heroTitle: fallbackHeroTitle,
     heroSubtitle: fallbackHeroSubtitle,
+    heroImage: {
+      src: "/reset-body-lab-hero.webp",
+      alt: "Reset Body Lab Pilates"
+    },
     about: fallbackSiteContent.reformer.body,
     faqItems: fallbackFaqs,
     siteContent: fallbackSiteContent,
@@ -993,7 +998,7 @@ export async function loadPageContent(locale: Locale): Promise<PageContent> {
       remoteImageUrls.length > 0 ? buildGalleryVersion(remoteImageUrls) : "";
     const copy = homeCopy[locale];
 
-    const galleryImages =
+    const remoteGalleryImages =
       remoteImageUrls.length > 0
         ? remoteImageUrls.map((src, index) => ({
             src: toGalleryImageSrc(src, version),
@@ -1001,6 +1006,8 @@ export async function loadPageContent(locale: Locale): Promise<PageContent> {
             version
           }))
         : fallbackGalleryImages;
+    const heroImage = remoteGalleryImages[0] ?? fallback.heroImage;
+    const galleryImages = remoteGalleryImages.length > 1 ? remoteGalleryImages.slice(1) : remoteGalleryImages;
 
     return {
       salonName: normalizeString(salon.name) || fallback.salonName,
@@ -1025,6 +1032,7 @@ export async function loadPageContent(locale: Locale): Promise<PageContent> {
             fallback: ""
           }) || fallbackHeroSubtitle
       }),
+      heroImage,
       about:
         normalizeLocalizedEditableString({
           record: salonRecord,
@@ -1046,7 +1054,7 @@ export async function loadPageContent(locale: Locale): Promise<PageContent> {
           : hasField(salonRecord, "faq_items")
       ),
       siteContent,
-      galleryImages,
+      galleryImages: galleryImages.length > 0 ? galleryImages : fallbackGalleryImages,
       phone: normalizeString(salon.phone),
       email: normalizeString(salon.email),
       city: normalizeString(salon.city),
@@ -1190,8 +1198,8 @@ export async function HomePage({ locale }: { locale: Locale }) {
       <section id="top" className="hero">
         <Image
           className="hero__image"
-          src="/reset-body-lab-hero.webp"
-          alt={`${copy.heroImageAltPrefix} ${pageContent.salonName}`}
+          src={pageContent.heroImage.src}
+          alt={pageContent.heroImage.alt || `${copy.heroImageAltPrefix} ${pageContent.salonName}`}
           fill
           sizes="100vw"
           priority
