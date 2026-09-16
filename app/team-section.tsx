@@ -19,10 +19,14 @@ function StaffAvatar({ member }: { member: StaffMember }) {
 
 export function TeamSection({
   staffMembers,
-  locale
+  locale,
+  title,
+  body
 }: {
   staffMembers: StaffMember[];
   locale: "bg" | "en";
+  title?: string;
+  body?: string;
 }) {
   const [selectedMember, setSelectedMember] = useState<StaffMember | null>(null);
   const isBg = locale === "bg";
@@ -30,11 +34,12 @@ export function TeamSection({
   return (
     <section id="team" className="team-section">
       <div className="section-copy section-copy--center team-section__copy">
-        <h2>{isBg ? "Нашият екип" : "Our team"}</h2>
+        <h2>{title?.trim() || (isBg ? "Нашият екип" : "Our team")}</h2>
         <p>
-          {isBg
-            ? "Всяка тренировка се води от инструктор с внимание към техника, темпо и индивидуално усещане за тялото."
-            : "Each class is guided with attention to technique, pacing, and the individual feel of the body."}
+          {body?.trim() ||
+            (isBg
+              ? "Всяка тренировка се води от инструктор с внимание към техника, темпо и индивидуално усещане за тялото."
+              : "Each class is guided with attention to technique, pacing, and the individual feel of the body.")}
         </p>
       </div>
       <div className="team-grid">

@@ -1,4 +1,4 @@
-import { Facebook, Instagram, Languages, MapPinned, Music4, Phone } from "lucide-react";
+import { Facebook, Instagram, MapPinned, Music4, Phone } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -35,6 +35,24 @@ type SiteContentPriceItem = {
 };
 
 type SiteContent = {
+  seo: {
+    title: string;
+    description: string;
+  };
+  labels: {
+    navReformer: string;
+    navGallery: string;
+    navTeam: string;
+    navPricing: string;
+    navFaq: string;
+    navContact: string;
+    benefitsHeading: string;
+    audienceHeading: string;
+    pricingHeading: string;
+    faqHeading: string;
+    finalCtaTitle: string;
+    finalCtaBody: string;
+  };
   benefits: {
     title: string;
     intro: string;
@@ -204,6 +222,25 @@ function getFallbackGalleryImages(locale: Locale): GalleryImage[] {
 function defaultSiteContent(locale: Locale): SiteContent {
   if (locale === "en") {
     return {
+      seo: {
+        title: "Reset Body Lab - Reformer Pilates studio in Varna",
+        description:
+          "Reformer Pilates for better posture, more strength, mobility and balance in a calm boutique studio in Varna."
+      },
+      labels: {
+        navReformer: "Reformer Pilates",
+        navGallery: "Studio",
+        navTeam: "Team",
+        navPricing: "Pricing",
+        navFaq: "FAQ",
+        navContact: "Contact",
+        benefitsHeading: "Main benefits include:",
+        audienceHeading: "Training is suitable for:",
+        pricingHeading: "Packages",
+        faqHeading: "Frequently asked questions",
+        finalCtaTitle: "Ready to begin?",
+        finalCtaBody: "Choose an available time and reserve one of the five reformer beds."
+      },
       benefits: {
         title: "Benefits",
         intro: "A precise session that works the body without overcomplicating the experience.",
@@ -258,14 +295,14 @@ function defaultSiteContent(locale: Locale): SiteContent {
             id: "price-1",
             name: "4-session package",
             price: "",
-            text: "Coming soon. Validity: 30 days.",
+            text: "Validity: 30 days.",
             serviceId: ""
           },
           {
             id: "price-2",
             name: "8-session package",
             price: "",
-            text: "Coming soon. Validity: 30 days.",
+            text: "Validity: 30 days.",
             serviceId: ""
           }
         ],
@@ -292,6 +329,25 @@ function defaultSiteContent(locale: Locale): SiteContent {
   }
 
   return {
+    seo: {
+      title: "Reset body lab - Реформър Пилатес студио в град Варна",
+      description:
+        "Реформър пилатес за по-добра стойка, повече сила, мобилност и баланс в спокойно бутиково студио във Варна."
+    },
+    labels: {
+      navReformer: "Реформър пилатес",
+      navGallery: "Студио",
+      navTeam: "Екип",
+      navPricing: "Цени",
+      navFaq: "FAQ",
+      navContact: "Контакт",
+      benefitsHeading: "Основните ползи включват:",
+      audienceHeading: "Тренировките са подходящи за:",
+      pricingHeading: "Пакети",
+      faqHeading: "Често задавани въпроси",
+      finalCtaTitle: "Готова ли си да започнеш?",
+      finalCtaBody: "Избери свободен час и запази едно от петте реформър легла."
+    },
     benefits: {
       title: "Ползи",
       intro: "Шест ясни причини реформър пилатес да се усеща едновременно ефективен, щадящ и устойчив като практика.",
@@ -357,18 +413,18 @@ function defaultSiteContent(locale: Locale): SiteContent {
       intro:
         "Пакетите се настройват според актуалните условия на студиото. За най-точна информация отвори резервацията.",
       items: [
-        {
-          id: "price-1",
-          name: "Пакет 4 тренировки",
-          price: "",
-          text: "Очаквайте скоро. Валидност: 30 дни.",
+          {
+            id: "price-1",
+            name: "Пакет 4 тренировки",
+            price: "",
+          text: "Валидност: 30 дни.",
           serviceId: ""
         },
         {
           id: "price-2",
           name: "Пакет 8 тренировки",
           price: "",
-          text: "Очаквайте скоро. Валидност: 30 дни.",
+          text: "Валидност: 30 дни.",
           serviceId: ""
         }
       ],
@@ -652,6 +708,21 @@ function getPricingButtonLabel(item: SiteContentPriceItem, locale: Locale) {
   return locale === "bg" ? "Купи пакет" : "Buy package";
 }
 
+function getPricingDescription(item: SiteContentPriceItem) {
+  return item.text
+    .replace(/^\s*Очаквайте скоро\.?\s*/i, "")
+    .replace(/^\s*Coming soon\.?\s*/i, "")
+    .trim();
+}
+
+function isPlaceholderPricingNote(note: string) {
+  const normalizedNote = note.trim().toLowerCase();
+  return (
+    normalizedNote === "добави реалните цени, когато клиентът ги изпрати." ||
+    normalizedNote === "add the real prices when the client sends them."
+  );
+}
+
 function isComingSoonPricingItem(item: SiteContentPriceItem) {
   const normalizedName = item.name.toLowerCase();
   const normalizedText = item.text.toLowerCase();
@@ -669,6 +740,8 @@ function isComingSoonPricingItem(item: SiteContentPriceItem) {
 
 function normalizeSiteContent(raw: unknown, fallback: SiteContent) {
   const content = isRecord(raw) ? raw : {};
+  const seo = content.seo && isRecord(content.seo) ? content.seo : {};
+  const labels = content.labels && isRecord(content.labels) ? content.labels : {};
   const benefits = content.benefits && isRecord(content.benefits) ? content.benefits : {};
   const reformer = content.reformer && isRecord(content.reformer) ? content.reformer : {};
   const audience = content.audience && isRecord(content.audience) ? content.audience : {};
@@ -681,6 +754,44 @@ function normalizeSiteContent(raw: unknown, fallback: SiteContent) {
   const contact = content.contact && isRecord(content.contact) ? content.contact : {};
 
   return {
+    seo: {
+      title: normalizeEditableString(seo, "title", fallback.seo.title),
+      description: normalizeEditableString(seo, "description", fallback.seo.description)
+    },
+    labels: {
+      navReformer: normalizeEditableString(labels, "navReformer", fallback.labels.navReformer),
+      navGallery: normalizeEditableString(labels, "navGallery", fallback.labels.navGallery),
+      navTeam: normalizeEditableString(labels, "navTeam", fallback.labels.navTeam),
+      navPricing: normalizeEditableString(labels, "navPricing", fallback.labels.navPricing),
+      navFaq: normalizeEditableString(labels, "navFaq", fallback.labels.navFaq),
+      navContact: normalizeEditableString(labels, "navContact", fallback.labels.navContact),
+      benefitsHeading: normalizeEditableString(
+        labels,
+        "benefitsHeading",
+        fallback.labels.benefitsHeading
+      ),
+      audienceHeading: normalizeEditableString(
+        labels,
+        "audienceHeading",
+        fallback.labels.audienceHeading
+      ),
+      pricingHeading: normalizeEditableString(
+        labels,
+        "pricingHeading",
+        fallback.labels.pricingHeading
+      ),
+      faqHeading: normalizeEditableString(labels, "faqHeading", fallback.labels.faqHeading),
+      finalCtaTitle: normalizeEditableString(
+        labels,
+        "finalCtaTitle",
+        fallback.labels.finalCtaTitle
+      ),
+      finalCtaBody: normalizeEditableString(
+        labels,
+        "finalCtaBody",
+        fallback.labels.finalCtaBody
+      )
+    },
     benefits: {
       title: normalizeEditableString(benefits, "title", fallback.benefits.title),
       intro: normalizeEditableString(benefits, "intro", fallback.benefits.intro),
@@ -803,7 +914,7 @@ function toSocialUrl(
   return `https://tiktok.com/@${handle}`;
 }
 
-async function loadPageContent(locale: Locale): Promise<PageContent> {
+export async function loadPageContent(locale: Locale): Promise<PageContent> {
   const fallbackSiteContent = defaultSiteContent(locale);
   const fallbackFaqs = getFallbackFaqs(locale);
   const fallbackGalleryImages = getFallbackGalleryImages(locale);
@@ -960,6 +1071,7 @@ export async function HomePage({ locale }: { locale: Locale }) {
 
   const copy = homeCopy[locale];
   const pageContent = await loadPageContent(locale);
+  const labels = pageContent.siteContent.labels;
   const hasFaqItems = pageContent.faqItems.length > 0;
   const mapSrc = buildMapEmbedSrc({
     address: pageContent.address,
@@ -1034,12 +1146,12 @@ export async function HomePage({ locale }: { locale: Locale }) {
           />
         </a>
         <nav aria-label={copy.localeLabel}>
-          <a href="#reformer">{copy.nav.reformer}</a>
-          <a href="#gallery">{copy.nav.gallery}</a>
-          <a href="#team">{copy.nav.team}</a>
-          <a href="#pricing">{copy.nav.pricing}</a>
-          {hasFaqItems ? <a href="#faq">{copy.nav.faq}</a> : null}
-          <a href="#contact">{copy.nav.contact}</a>
+          <a href="#reformer">{labels.navReformer}</a>
+          <a href="#gallery">{labels.navGallery}</a>
+          <a href="#team">{labels.navTeam}</a>
+          <a href="#pricing">{labels.navPricing}</a>
+          {hasFaqItems ? <a href="#faq">{labels.navFaq}</a> : null}
+          <a href="#contact">{labels.navContact}</a>
         </nav>
         <div className="header-actions">
           <a
@@ -1053,7 +1165,6 @@ export async function HomePage({ locale }: { locale: Locale }) {
             <MapPinned size={18} strokeWidth={2} aria-hidden="true" />
           </a>
           <div className="locale-switcher" aria-label={copy.localeLabel}>
-            <Languages size={15} strokeWidth={1.8} aria-hidden="true" />
             <Link
               href={localizedPath("bg")}
               className={locale === "bg" ? "is-active" : undefined}
@@ -1181,7 +1292,7 @@ export async function HomePage({ locale }: { locale: Locale }) {
       <section className="benefits-section">
         <div className="split-section split-section--dark">
           <div className="section-copy split-section__copy">
-            <h2>{locale === "bg" ? "Основните ползи включват:" : "Main benefits include:"}</h2>
+            <h2>{labels.benefitsHeading}</h2>
             <ul className="check-list check-list--light">
               {pageContent.siteContent.benefits.items.map((benefit) => (
                 <li key={benefit.id}>{benefit.title}</li>
@@ -1212,7 +1323,7 @@ export async function HomePage({ locale }: { locale: Locale }) {
             />
           </div>
           <div className="section-copy split-section__copy">
-            <h2>{locale === "bg" ? "Тренировките са подходящи за:" : "Training is suitable for:"}</h2>
+            <h2>{labels.audienceHeading}</h2>
             <ul className="check-list">
               {pageContent.siteContent.audience.items.map((item) => (
                 <li key={item}>{item}</li>
@@ -1224,9 +1335,6 @@ export async function HomePage({ locale }: { locale: Locale }) {
 
       <section id="gallery" className="gallery-section">
         <div className="gallery-section__copy section-copy section-copy--center">
-          {pageContent.siteContent.gallery.subtitle ? (
-            <p className="section-label">{pageContent.siteContent.gallery.subtitle}</p>
-          ) : null}
           <h2>{pageContent.siteContent.gallery.title}</h2>
           {pageContent.siteContent.gallery.body ? (
             <p>{pageContent.siteContent.gallery.body}</p>
@@ -1234,21 +1342,27 @@ export async function HomePage({ locale }: { locale: Locale }) {
         </div>
         <GalleryPreview
           images={pageContent.galleryImages}
-          label={`${pageContent.salonName} ${copy.nav.gallery}`}
+          label={`${pageContent.salonName} ${labels.navGallery}`}
           moreLabel={locale === "bg" ? "Виж още" : "See more"}
         />
       </section>
 
-      <TeamSection staffMembers={pageContent.staffMembers} locale={locale} />
+      <TeamSection
+        staffMembers={pageContent.staffMembers}
+        locale={locale}
+        title={pageContent.siteContent.instructors.title}
+        body={pageContent.siteContent.instructors.body}
+      />
 
       <section id="pricing" className="pricing-section">
         <div className="section-copy section-copy--center">
-          <h2>{copy.pricingLabel}</h2>
+          <h2>{labels.pricingHeading}</h2>
         </div>
         <div className="pricing-grid">
           {pageContent.siteContent.pricing.items.map((item, index) => {
             const pricingImage = pricingImages[index % pricingImages.length];
             const isComingSoon = isComingSoonPricingItem(item);
+            const pricingDescription = getPricingDescription(item);
 
             return (
               <article
@@ -1266,7 +1380,7 @@ export async function HomePage({ locale }: { locale: Locale }) {
                 </div>
                 <div className="pricing-copy">
                   <h3>{item.name}</h3>
-                  <p>{item.text}</p>
+                  {pricingDescription ? <p>{pricingDescription}</p> : null}
                 </div>
                 {item.price ? <p className="price">{item.price}</p> : null}
                 {isComingSoon ? (
@@ -1290,7 +1404,8 @@ export async function HomePage({ locale }: { locale: Locale }) {
             );
           })}
         </div>
-        {pageContent.siteContent.pricing.note ? (
+        {pageContent.siteContent.pricing.note &&
+        !isPlaceholderPricingNote(pageContent.siteContent.pricing.note) ? (
           <div className="section-copy section-copy--center pricing-note">
             <p>{pageContent.siteContent.pricing.note}</p>
           </div>
@@ -1319,8 +1434,8 @@ export async function HomePage({ locale }: { locale: Locale }) {
       {hasFaqItems ? (
         <section id="faq" className="faq-section">
           <div className="section-copy section-copy--center">
-            <p className="section-label">{copy.nav.faq}</p>
-            <h2>{copy.faqTitle}</h2>
+            <p className="section-label">{labels.navFaq}</p>
+            <h2>{labels.faqHeading}</h2>
           </div>
           <div className="faq-list">
             {pageContent.faqItems.map((item) => (
@@ -1335,9 +1450,7 @@ export async function HomePage({ locale }: { locale: Locale }) {
 
       <section id="booking" className="final-cta final-cta--booking">
         <p className="reservation-kicker">
-          {locale === "bg"
-            ? "Готова ли си да започнеш? Запази място сега:"
-            : "Ready to begin? Reserve your place now:"}
+          {labels.finalCtaTitle} {labels.finalCtaBody}
         </p>
         <div className="reservation-panel">
           <div className="section-copy section-copy--center reservation-copy reservation-copy--button-only">
