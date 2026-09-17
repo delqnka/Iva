@@ -283,21 +283,6 @@ nav a:hover {
   text-transform: uppercase;
 }
 
-.hero__opening {
-  display: block;
-  width: 100%;
-  max-width: 800px;
-  margin: 30px auto 0;
-  color: var(--launch-surface);
-  font-size: clamp(40px, 6.8vw, 84px);
-  font-weight: 650;
-  line-height: 0.92;
-  letter-spacing: -0.045em;
-  text-align: center;
-  text-wrap: balance;
-  text-shadow: 0 3px 22px rgba(0, 0, 0, 0.42);
-}
-
 .section-label {
   margin-bottom: 12px;
   color: var(--accent-dark);

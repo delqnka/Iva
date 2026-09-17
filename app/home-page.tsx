@@ -1213,11 +1213,6 @@ export async function HomePage({ locale }: { locale: Locale }) {
               {copy.learnMore}
             </a>
           </div>
-          <div className="hero__opening">
-            <time dateTime="2026-09-17">
-              {locale === "bg" ? "ОТВАРЯМЕ НА 17.09" : "OPENING 17.09"}
-            </time>
-          </div>
         </div>
       </section>
 
