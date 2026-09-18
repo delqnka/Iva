@@ -12,6 +12,12 @@ export const primaryServiceId =
 export const matPilatesServiceId =
   process.env.NEXT_PUBLIC_MAT_SERVICE_ID?.trim() || "svc-mt7a168p";
 
+export const strongMatServiceId =
+  process.env.NEXT_PUBLIC_STRONG_MAT_SERVICE_ID?.trim() || "Strong Mat";
+
+export const stretchMatServiceId =
+  process.env.NEXT_PUBLIC_STRETCH_MAT_SERVICE_ID?.trim() || "Stretch Mat";
+
 export function PrimaryBookingButton({
   children = "Запази час",
   variant = "dark",

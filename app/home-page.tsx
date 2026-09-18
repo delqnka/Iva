@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { GalleryPreview } from "./gallery-preview";
-import { PrimaryBookingButton } from "./booking-actions";
+import { PrimaryBookingButton, strongMatServiceId, stretchMatServiceId } from "./booking-actions";
 import { homeCopy, isLocale, type Locale, localizedPath } from "./i18n";
 import { loadStaffMembers, type StaffMember } from "./staff";
 import { TeamSection } from "./team-section";
@@ -548,6 +548,41 @@ function normalizeEditableString(
   return hasField(record, key) ? normalizeString(record[key]) : fallback;
 }
 
+function containsCyrillic(value: string) {
+  return /[\u0400-\u04FF]/.test(value);
+}
+
+function isWrongLocaleText(value: string, locale: Locale) {
+  const text = value.trim();
+  if (!text) return false;
+
+  if (locale === "en") {
+    return containsCyrillic(text);
+  }
+
+  if (containsCyrillic(text)) return false;
+
+  const remainingLatin = text
+    .toLowerCase()
+    .replace(/reset\s*body\s*lab/g, "")
+    .replace(/google\s*maps/g, "")
+    .replace(/\b(faq|bg|en|instagram|facebook|tiktok)\b/g, "")
+    .replace(/[^a-z]+/g, "");
+
+  return remainingLatin.length > 0;
+}
+
+function normalizeLocalizedContentString(
+  record: Record<string, unknown>,
+  key: string,
+  fallback: string,
+  locale: Locale
+) {
+  if (!hasField(record, key)) return fallback;
+  const value = normalizeString(record[key]);
+  return isWrongLocaleText(value, locale) ? fallback : value;
+}
+
 function normalizeLocalizedEditableString({
   record,
   locale,
@@ -612,17 +647,30 @@ function getLocalizedEditableValue({
   return undefined;
 }
 
-function normalizeStringList(value: unknown, fallback: string[], hasEditableValue = true) {
+function normalizeStringList(
+  value: unknown,
+  fallback: string[],
+  hasEditableValue = true,
+  locale?: Locale
+) {
   if (!hasEditableValue) return fallback;
   if (!Array.isArray(value)) return [];
-  const items = value.map((item) => normalizeString(item)).filter(Boolean);
-  return items;
+  const items = value
+    .map((item, index) => {
+      const text = normalizeString(item);
+      if (!text) return "";
+      if (locale && isWrongLocaleText(text, locale)) return fallback[index] ?? "";
+      return text;
+    })
+    .filter(Boolean);
+  return items.length > 0 ? items : fallback;
 }
 
 function normalizeBenefitItems(
   value: unknown,
   fallback: SiteContentBenefitItem[],
-  hasEditableValue = true
+  hasEditableValue = true,
+  locale?: Locale
 ) {
   if (!hasEditableValue) return fallback;
   if (!Array.isArray(value)) return [];
@@ -630,8 +678,17 @@ function normalizeBenefitItems(
   const items = value
     .map((item, index) => {
       if (!isRecord(item)) return null;
-      const title = normalizeString(item.title);
-      const text = normalizeString(item.text);
+      const fallbackItem = fallback[index];
+      const rawTitle = normalizeString(item.title);
+      const rawText = normalizeString(item.text);
+      const title =
+        locale && isWrongLocaleText(rawTitle, locale)
+          ? fallbackItem?.title ?? ""
+          : rawTitle;
+      const text =
+        locale && isWrongLocaleText(rawText, locale)
+          ? fallbackItem?.text ?? ""
+          : rawText;
       if (!title && !text) return null;
       return {
         id: normalizeString(item.id) || `benefit-${index + 1}`,
@@ -647,7 +704,8 @@ function normalizeBenefitItems(
 function normalizePriceItems(
   value: unknown,
   fallback: SiteContentPriceItem[],
-  hasEditableValue = true
+  hasEditableValue = true,
+  locale?: Locale
 ) {
   if (!hasEditableValue) return fallback;
   if (!Array.isArray(value)) return [];
@@ -655,9 +713,18 @@ function normalizePriceItems(
   const items = value
     .map((item, index) => {
       if (!isRecord(item)) return null;
-      const name = normalizeString(item.name);
+      const fallbackItem = fallback[index];
+      const rawName = normalizeString(item.name);
       const price = normalizeString(item.price);
-      const text = normalizeString(item.text);
+      const rawText = normalizeString(item.text);
+      const name =
+        locale && isWrongLocaleText(rawName, locale)
+          ? fallbackItem?.name ?? ""
+          : rawName;
+      const text =
+        locale && isWrongLocaleText(rawText, locale)
+          ? fallbackItem?.text ?? ""
+          : rawText;
       const serviceId = normalizeString(
         item.serviceId ?? item.service ?? item.bookingServiceId ?? item.productId
       );
@@ -675,15 +742,29 @@ function normalizePriceItems(
   return items;
 }
 
-function normalizeFaqItems(value: unknown, fallback: FaqItem[], hasEditableValue = true) {
+function normalizeFaqItems(
+  value: unknown,
+  fallback: FaqItem[],
+  hasEditableValue = true,
+  locale?: Locale
+) {
   if (!hasEditableValue) return fallback;
   if (!Array.isArray(value)) return [];
 
   const items = value
     .map((item, index) => {
       if (!isRecord(item)) return null;
-      const question = normalizeString(item.question);
-      const answer = normalizeString(item.answer);
+      const fallbackItem = fallback[index];
+      const rawQuestion = normalizeString(item.question);
+      const rawAnswer = normalizeString(item.answer);
+      const question =
+        locale && isWrongLocaleText(rawQuestion, locale)
+          ? fallbackItem?.question ?? ""
+          : rawQuestion;
+      const answer =
+        locale && isWrongLocaleText(rawAnswer, locale)
+          ? fallbackItem?.answer ?? ""
+          : rawAnswer;
       if (!question || !answer) return null;
       return {
         id: normalizeString(item.id) || `faq-${index + 1}`,
@@ -739,7 +820,7 @@ function isComingSoonPricingItem(item: SiteContentPriceItem) {
   );
 }
 
-function normalizeSiteContent(raw: unknown, fallback: SiteContent) {
+function normalizeSiteContent(raw: unknown, fallback: SiteContent, locale: Locale) {
   const content = isRecord(raw) ? raw : {};
   const seo = content.seo && isRecord(content.seo) ? content.seo : {};
   const labels = content.labels && isRecord(content.labels) ? content.labels : {};
@@ -760,97 +841,106 @@ function normalizeSiteContent(raw: unknown, fallback: SiteContent) {
       description: normalizeEditableString(seo, "description", fallback.seo.description)
     },
     labels: {
-      navReformer: normalizeEditableString(labels, "navReformer", fallback.labels.navReformer),
-      navGallery: normalizeEditableString(labels, "navGallery", fallback.labels.navGallery),
-      navTeam: normalizeEditableString(labels, "navTeam", fallback.labels.navTeam),
-      navPricing: normalizeEditableString(labels, "navPricing", fallback.labels.navPricing),
-      navFaq: normalizeEditableString(labels, "navFaq", fallback.labels.navFaq),
-      navContact: normalizeEditableString(labels, "navContact", fallback.labels.navContact),
-      benefitsHeading: normalizeEditableString(
+      navReformer: normalizeLocalizedContentString(labels, "navReformer", fallback.labels.navReformer, locale),
+      navGallery: normalizeLocalizedContentString(labels, "navGallery", fallback.labels.navGallery, locale),
+      navTeam: normalizeLocalizedContentString(labels, "navTeam", fallback.labels.navTeam, locale),
+      navPricing: normalizeLocalizedContentString(labels, "navPricing", fallback.labels.navPricing, locale),
+      navFaq: normalizeLocalizedContentString(labels, "navFaq", fallback.labels.navFaq, locale),
+      navContact: normalizeLocalizedContentString(labels, "navContact", fallback.labels.navContact, locale),
+      benefitsHeading: normalizeLocalizedContentString(
         labels,
         "benefitsHeading",
-        fallback.labels.benefitsHeading
+        fallback.labels.benefitsHeading,
+        locale
       ),
-      audienceHeading: normalizeEditableString(
+      audienceHeading: normalizeLocalizedContentString(
         labels,
         "audienceHeading",
-        fallback.labels.audienceHeading
+        fallback.labels.audienceHeading,
+        locale
       ),
-      pricingHeading: normalizeEditableString(
+      pricingHeading: normalizeLocalizedContentString(
         labels,
         "pricingHeading",
-        fallback.labels.pricingHeading
+        fallback.labels.pricingHeading,
+        locale
       ),
-      faqHeading: normalizeEditableString(labels, "faqHeading", fallback.labels.faqHeading),
-      finalCtaTitle: normalizeEditableString(
+      faqHeading: normalizeLocalizedContentString(labels, "faqHeading", fallback.labels.faqHeading, locale),
+      finalCtaTitle: normalizeLocalizedContentString(
         labels,
         "finalCtaTitle",
-        fallback.labels.finalCtaTitle
+        fallback.labels.finalCtaTitle,
+        locale
       ),
-      finalCtaBody: normalizeEditableString(
+      finalCtaBody: normalizeLocalizedContentString(
         labels,
         "finalCtaBody",
-        fallback.labels.finalCtaBody
+        fallback.labels.finalCtaBody,
+        locale
       )
     },
     benefits: {
-      title: normalizeEditableString(benefits, "title", fallback.benefits.title),
-      intro: normalizeEditableString(benefits, "intro", fallback.benefits.intro),
+      title: normalizeLocalizedContentString(benefits, "title", fallback.benefits.title, locale),
+      intro: normalizeLocalizedContentString(benefits, "intro", fallback.benefits.intro, locale),
       items: normalizeBenefitItems(
         benefits.items,
         fallback.benefits.items,
-        hasField(benefits, "items")
+        hasField(benefits, "items"),
+        locale
       )
     },
     reformer: {
-      title: normalizeEditableString(reformer, "title", fallback.reformer.title),
-      subtitle: normalizeEditableString(reformer, "subtitle", fallback.reformer.subtitle),
-      body: normalizeEditableString(reformer, "body", fallback.reformer.body)
+      title: normalizeLocalizedContentString(reformer, "title", fallback.reformer.title, locale),
+      subtitle: normalizeLocalizedContentString(reformer, "subtitle", fallback.reformer.subtitle, locale),
+      body: normalizeLocalizedContentString(reformer, "body", fallback.reformer.body, locale)
     },
     audience: {
-      title: normalizeEditableString(audience, "title", fallback.audience.title),
-      intro: normalizeEditableString(audience, "intro", fallback.audience.intro),
+      title: normalizeLocalizedContentString(audience, "title", fallback.audience.title, locale),
+      intro: normalizeLocalizedContentString(audience, "intro", fallback.audience.intro, locale),
       items: normalizeStringList(
         audience.items,
         fallback.audience.items,
-        hasField(audience, "items")
+        hasField(audience, "items"),
+        locale
       ),
-      outro: normalizeEditableString(audience, "outro", fallback.audience.outro)
+      outro: normalizeLocalizedContentString(audience, "outro", fallback.audience.outro, locale)
     },
     whyChooseUs: {
-      title: normalizeEditableString(whyChooseUs, "title", fallback.whyChooseUs.title),
-      intro: normalizeEditableString(whyChooseUs, "intro", fallback.whyChooseUs.intro),
+      title: normalizeLocalizedContentString(whyChooseUs, "title", fallback.whyChooseUs.title, locale),
+      intro: normalizeLocalizedContentString(whyChooseUs, "intro", fallback.whyChooseUs.intro, locale),
       items: normalizeStringList(
         whyChooseUs.items,
         fallback.whyChooseUs.items,
-        hasField(whyChooseUs, "items")
+        hasField(whyChooseUs, "items"),
+        locale
       ),
-      outro: normalizeEditableString(whyChooseUs, "outro", fallback.whyChooseUs.outro)
+      outro: normalizeLocalizedContentString(whyChooseUs, "outro", fallback.whyChooseUs.outro, locale)
     },
     pricing: {
-      title: normalizeEditableString(pricing, "title", fallback.pricing.title),
-      intro: normalizeEditableString(pricing, "intro", fallback.pricing.intro),
+      title: normalizeLocalizedContentString(pricing, "title", fallback.pricing.title, locale),
+      intro: normalizeLocalizedContentString(pricing, "intro", fallback.pricing.intro, locale),
       items: normalizePriceItems(
         pricing.items,
         fallback.pricing.items,
-        hasField(pricing, "items")
+        hasField(pricing, "items"),
+        locale
       ),
-      note: normalizeEditableString(pricing, "note", fallback.pricing.note)
+      note: normalizeLocalizedContentString(pricing, "note", fallback.pricing.note, locale)
     },
     instructors: {
-      title: normalizeEditableString(instructors, "title", fallback.instructors.title),
-      subtitle: normalizeEditableString(instructors, "subtitle", fallback.instructors.subtitle),
-      body: normalizeEditableString(instructors, "body", fallback.instructors.body)
+      title: normalizeLocalizedContentString(instructors, "title", fallback.instructors.title, locale),
+      subtitle: normalizeLocalizedContentString(instructors, "subtitle", fallback.instructors.subtitle, locale),
+      body: normalizeLocalizedContentString(instructors, "body", fallback.instructors.body, locale)
     },
     gallery: {
-      title: normalizeEditableString(gallery, "title", fallback.gallery.title),
-      subtitle: normalizeEditableString(gallery, "subtitle", fallback.gallery.subtitle),
-      body: normalizeEditableString(gallery, "body", fallback.gallery.body)
+      title: normalizeLocalizedContentString(gallery, "title", fallback.gallery.title, locale),
+      subtitle: normalizeLocalizedContentString(gallery, "subtitle", fallback.gallery.subtitle, locale),
+      body: normalizeLocalizedContentString(gallery, "body", fallback.gallery.body, locale)
     },
     contact: {
-      title: normalizeEditableString(contact, "title", fallback.contact.title),
-      subtitle: normalizeEditableString(contact, "subtitle", fallback.contact.subtitle),
-      body: normalizeEditableString(contact, "body", fallback.contact.body)
+      title: normalizeLocalizedContentString(contact, "title", fallback.contact.title, locale),
+      subtitle: normalizeLocalizedContentString(contact, "subtitle", fallback.contact.subtitle, locale),
+      body: normalizeLocalizedContentString(contact, "body", fallback.contact.body, locale)
     }
   };
 }
@@ -984,7 +1074,8 @@ export async function loadPageContent(locale: Locale): Promise<PageContent> {
         bgKey: "site_content",
         enKey: "site_content_en"
       }),
-      fallbackSiteContent
+      fallbackSiteContent,
+      locale
     );
 
     const remoteImageUrls = Array.isArray(salon.images)
@@ -1051,7 +1142,8 @@ export async function loadPageContent(locale: Locale): Promise<PageContent> {
         fallbackFaqs,
         locale === "en"
           ? hasField(salonRecord, "faq_items_en") || hasField(salonRecord, "faq_items")
-          : hasField(salonRecord, "faq_items")
+          : hasField(salonRecord, "faq_items"),
+        locale
       ),
       siteContent,
       galleryImages: galleryImages.length > 0 ? galleryImages : fallbackGalleryImages,
@@ -1261,6 +1353,69 @@ export async function HomePage({ locale }: { locale: Locale }) {
           <span />
         </div>
         <p>{locale === "bg" ? "по реформър пилатес в Reset Body Lab" : "with reformer pilates at Reset Body Lab"}</p>
+      </section>
+
+      <section className="mat-announcement-section" aria-labelledby="mat-announcement-title">
+        <div className="mat-announcement">
+          <div className="mat-announcement__intro">
+            <p className="section-label">
+              {locale === "bg" ? "Ново в графика" : "New in the schedule"}
+            </p>
+            <h2 id="mat-announcement-title">
+              {locale === "bg" ? "Strong Mat и Stretch Mat" : "Strong Mat and Stretch Mat"}
+            </h2>
+            <p>
+              {locale === "bg"
+                ? "Два нови mat формата с малки групи до 4 места, 50 минути фокусирано движение и цена 13 €."
+                : "Two new mat formats with small groups of up to 4 spots, 50 minutes of focused movement, and a 13 € price."}
+            </p>
+          </div>
+
+          <div className="mat-class-grid">
+            {[
+              {
+                name: "Strong Mat",
+                serviceId: strongMatServiceId,
+                tone: "strong",
+                body:
+                  locale === "bg"
+                    ? "По-интензивен клас за сила, стабилност и контрол на тялото."
+                    : "A stronger class for body strength, stability, and control.",
+                cta: locale === "bg" ? "Запази Strong Mat" : "Book Strong Mat"
+              },
+              {
+                name: "Stretch Mat",
+                serviceId: stretchMatServiceId,
+                tone: "stretch",
+                body:
+                  locale === "bg"
+                    ? "По-мек формат за мобилност, разтягане и освобождаване на напрежението."
+                    : "A softer format for mobility, stretching, and releasing tension.",
+                cta: locale === "bg" ? "Запази Stretch Mat" : "Book Stretch Mat"
+              }
+            ].map((matClass) => (
+              <article className={`mat-class-card mat-class-card--${matClass.tone}`} key={matClass.name}>
+                <div>
+                  <span className="mat-class-card__eyebrow">Mat Pilates</span>
+                  <h3>{matClass.name}</h3>
+                  <p>{matClass.body}</p>
+                </div>
+                <div className="mat-class-card__facts" aria-label={locale === "bg" ? "Детайли" : "Details"}>
+                  <span>{locale === "bg" ? "4 места" : "4 spots"}</span>
+                  <span>50 min</span>
+                  <span>13 €</span>
+                </div>
+                <PrimaryBookingButton
+                  className="mat-class-card__button"
+                  service={matClass.serviceId}
+                  lockService
+                >
+                  {matClass.cta}
+                </PrimaryBookingButton>
+              </article>
+            ))}
+          </div>
+        </div>
       </section>
 
       <section id="reformer" className="intro-section">
