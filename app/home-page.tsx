@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { GalleryPreview } from "./gallery-preview";
-import { PrimaryBookingButton, strongMatServiceId, stretchMatServiceId } from "./booking-actions";
+import { PrimaryBookingButton } from "./booking-actions";
 import { homeCopy, isLocale, type Locale, localizedPath } from "./i18n";
 import { loadStaffMembers, type StaffMember } from "./staff";
 import { TeamSection } from "./team-section";
@@ -1371,49 +1371,33 @@ export async function HomePage({ locale }: { locale: Locale }) {
             </p>
           </div>
 
-          <div className="mat-class-grid">
+          <div className="mat-format-list" aria-label={locale === "bg" ? "Нови mat формати" : "New mat formats"}>
             {[
               {
                 name: "Strong Mat",
-                serviceId: strongMatServiceId,
-                tone: "strong",
                 body:
                   locale === "bg"
                     ? "По-интензивен клас за сила, стабилност и контрол на тялото."
-                    : "A stronger class for body strength, stability, and control.",
-                cta: locale === "bg" ? "Запази Strong Mat" : "Book Strong Mat"
+                    : "A stronger class for body strength, stability, and control."
               },
               {
                 name: "Stretch Mat",
-                serviceId: stretchMatServiceId,
-                tone: "stretch",
                 body:
                   locale === "bg"
                     ? "По-мек формат за мобилност, разтягане и освобождаване на напрежението."
-                    : "A softer format for mobility, stretching, and releasing tension.",
-                cta: locale === "bg" ? "Запази Stretch Mat" : "Book Stretch Mat"
+                    : "A softer format for mobility, stretching, and releasing tension."
               }
             ].map((matClass) => (
-              <article className={`mat-class-card mat-class-card--${matClass.tone}`} key={matClass.name}>
-                <div>
-                  <span className="mat-class-card__eyebrow">Mat Pilates</span>
-                  <h3>{matClass.name}</h3>
-                  <p>{matClass.body}</p>
-                </div>
-                <div className="mat-class-card__facts" aria-label={locale === "bg" ? "Детайли" : "Details"}>
-                  <span>{locale === "bg" ? "4 места" : "4 spots"}</span>
-                  <span>50 min</span>
-                  <span>13 €</span>
-                </div>
-                <PrimaryBookingButton
-                  className="mat-class-card__button"
-                  service={matClass.serviceId}
-                  lockService
-                >
-                  {matClass.cta}
-                </PrimaryBookingButton>
-              </article>
+              <div className="mat-format-row" key={matClass.name}>
+                <h3>{matClass.name}</h3>
+                <p>{matClass.body}</p>
+              </div>
             ))}
+            <p className="mat-format-meta">
+              <span>{locale === "bg" ? "4 места" : "4 spots"}</span>
+              <span>50 {locale === "bg" ? "мин" : "min"}</span>
+              <span>13 €</span>
+            </p>
           </div>
         </div>
       </section>
