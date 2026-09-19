@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { GalleryPreview } from "./gallery-preview";
-import { PrimaryBookingButton } from "./booking-actions";
+import { PrimaryBookingButton, strongMatServiceId, stretchMatServiceId } from "./booking-actions";
 import { homeCopy, isLocale, type Locale, localizedPath } from "./i18n";
 import { loadStaffMembers, type StaffMember } from "./staff";
 import { TeamSection } from "./team-section";
@@ -1375,6 +1375,10 @@ export async function HomePage({ locale }: { locale: Locale }) {
             {[
               {
                 name: "Strong Mat",
+                serviceId: strongMatServiceId,
+                trainerName: "Йоанна",
+                schedule: locale === "bg" ? "Петък · 19:00" : "Friday · 19:00",
+                cta: locale === "bg" ? "Запази Strong Mat" : "Book Strong Mat",
                 body:
                   locale === "bg"
                     ? "По-интензивен клас за сила, стабилност и контрол на тялото."
@@ -1382,6 +1386,10 @@ export async function HomePage({ locale }: { locale: Locale }) {
               },
               {
                 name: "Stretch Mat",
+                serviceId: stretchMatServiceId,
+                trainerName: "Жени",
+                schedule: locale === "bg" ? "Четвъртък · 19:00" : "Thursday · 19:00",
+                cta: locale === "bg" ? "Запази Stretch Mat" : "Book Stretch Mat",
                 body:
                   locale === "bg"
                     ? "По-мек формат за мобилност, разтягане и освобождаване на напрежението."
@@ -1390,7 +1398,20 @@ export async function HomePage({ locale }: { locale: Locale }) {
             ].map((matClass) => (
               <div className="mat-format-row" key={matClass.name}>
                 <h3>{matClass.name}</h3>
-                <p>{matClass.body}</p>
+                <div className="mat-format-row__body">
+                  <p>{matClass.body}</p>
+                  <div className="mat-format-row__booking">
+                    <span>{matClass.schedule}</span>
+                    <PrimaryBookingButton
+                      service={matClass.serviceId}
+                      lockService
+                      trainerName={matClass.trainerName}
+                      className="mat-format-row__button"
+                    >
+                      {matClass.cta}
+                    </PrimaryBookingButton>
+                  </div>
+                </div>
               </div>
             ))}
             <p className="mat-format-meta">

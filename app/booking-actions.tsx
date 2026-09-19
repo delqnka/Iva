@@ -12,23 +12,32 @@ export const primaryServiceId =
 export const matPilatesServiceId =
   process.env.NEXT_PUBLIC_MAT_SERVICE_ID?.trim() || "svc-mt7a168p";
 
+export const strongMatServiceId =
+  process.env.NEXT_PUBLIC_STRONG_MAT_SERVICE_ID?.trim() || "svc-mu6qktmn";
+
+export const stretchMatServiceId =
+  process.env.NEXT_PUBLIC_STRETCH_MAT_SERVICE_ID?.trim() || "svc-mu6qm7lr";
+
 export function PrimaryBookingButton({
   children = "Запази час",
   variant = "dark",
   className = "",
   service,
-  lockService = false
+  lockService = false,
+  trainerName
 }: {
   children?: React.ReactNode;
   variant?: "dark" | "light";
   className?: string;
   service?: string;
   lockService?: boolean;
+  trainerName?: string;
 }) {
   return (
     <BookingButton
       service={service}
       lockService={lockService}
+      trainerName={trainerName}
       className={`${variant === "dark" ? "btn btn-dark" : "btn btn-light"} ${className}`.trim()}
     >
       {children}
