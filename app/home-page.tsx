@@ -1355,19 +1355,14 @@ export async function HomePage({ locale }: { locale: Locale }) {
         <p>{locale === "bg" ? "по реформър пилатес в Reset Body Lab" : "with reformer pilates at Reset Body Lab"}</p>
       </section>
 
-      <section className="mat-announcement-section" aria-labelledby="mat-announcement-title">
+      <section
+        className="mat-announcement-section"
+        aria-label={locale === "bg" ? "Ново в графика" : "New in the schedule"}
+      >
         <div className="mat-announcement">
           <div className="mat-announcement__intro">
             <p className="section-label">
               {locale === "bg" ? "Ново в графика" : "New in the schedule"}
-            </p>
-            <h2 id="mat-announcement-title">
-              {locale === "bg" ? "Strong Mat и Stretch Mat" : "Strong Mat and Stretch Mat"}
-            </h2>
-            <p>
-              {locale === "bg"
-                ? "Два нови mat формата с малки групи до 4 места, 50 минути фокусирано движение и цена 13 €."
-                : "Two new mat formats with small groups of up to 4 spots, 50 minutes of focused movement, and a 13 € price."}
             </p>
           </div>
 
