@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-const ADMIN_PATH_PREFIXES = ['/admin', '/api/admin', '/api/stripe', '/api/upload'];
+const ADMIN_PATH_PREFIXES = ['/admin', '/api/admin', '/api/bookings', '/api/stripe', '/api/upload'];
 
 function getEngineUrl() {
   const raw = process.env.NEXT_PUBLIC_ENGINE_URL?.trim();
