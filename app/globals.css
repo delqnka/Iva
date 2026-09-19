@@ -427,7 +427,8 @@ p {
 }
 
 .vibe-title-row span {
-  display: none;
+  height: 1px;
+  background: rgba(72, 81, 68, 0.5);
 }
 
 .vibe-title-row h2 {
