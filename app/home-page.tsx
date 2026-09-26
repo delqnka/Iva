@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { GalleryPreview } from "./gallery-preview";
-import { PrimaryBookingButton, strongMatServiceId, stretchMatServiceId } from "./booking-actions";
+import { PrimaryBookingButton, primaryServiceId, strongMatServiceId, stretchMatServiceId } from "./booking-actions";
 import { homeCopy, isLocale, type Locale, localizedPath } from "./i18n";
 import { loadStaffMembers, type StaffMember } from "./staff";
 import { TeamSection } from "./team-section";
@@ -237,7 +237,7 @@ function defaultSiteContent(locale: Locale): SiteContent {
         navContact: "Contact",
         benefitsHeading: "Main benefits include:",
         audienceHeading: "Training is suitable for:",
-        pricingHeading: "Packages",
+        pricingHeading: "Pricing and packages",
         faqHeading: "Frequently asked questions",
         finalCtaTitle: "Ready to begin?",
         finalCtaBody: "Choose an available time and reserve one of the five reformer beds."
@@ -293,14 +293,21 @@ function defaultSiteContent(locale: Locale): SiteContent {
           "Packages are adjusted to the studio's current conditions. Open the booking flow for the most accurate information.",
         items: [
           {
-            id: "price-1",
+            id: "single-visit",
+            name: "Single session",
+            price: "18 €",
+            text: "Reformer Pilates, 50 minutes.",
+            serviceId: primaryServiceId
+          },
+          {
+            id: "price-2",
             name: "4-session package",
             price: "",
             text: "Validity: 30 days.",
             serviceId: ""
           },
           {
-            id: "price-2",
+            id: "price-3",
             name: "8-session package",
             price: "",
             text: "Validity: 30 days.",
@@ -344,7 +351,7 @@ function defaultSiteContent(locale: Locale): SiteContent {
       navContact: "Контакт",
       benefitsHeading: "Основните ползи включват:",
       audienceHeading: "Тренировките са подходящи за:",
-      pricingHeading: "Пакети",
+      pricingHeading: "Цени и пакети",
       faqHeading: "Често задавани въпроси",
       finalCtaTitle: "Готова ли си да започнеш?",
       finalCtaBody: "Избери свободен час и запази едно от петте реформър легла."
@@ -414,15 +421,22 @@ function defaultSiteContent(locale: Locale): SiteContent {
       intro:
         "Пакетите се настройват според актуалните условия на студиото. За най-точна информация отвори резервацията.",
       items: [
-          {
-            id: "price-1",
-            name: "Пакет 4 тренировки",
-            price: "",
+        {
+          id: "single-visit",
+          name: "Единично посещение",
+          price: "18 €",
+          text: "Реформър пилатес, 50 минути.",
+          serviceId: primaryServiceId
+        },
+        {
+          id: "price-2",
+          name: "Пакет 4 тренировки",
+          price: "",
           text: "Валидност: 30 дни.",
           serviceId: ""
         },
         {
-          id: "price-2",
+          id: "price-3",
           name: "Пакет 8 тренировки",
           price: "",
           text: "Валидност: 30 дни.",
@@ -739,7 +753,57 @@ function normalizePriceItems(
     })
     .filter(Boolean) as SiteContentPriceItem[];
 
-  return items;
+  return ensureSingleVisitPricingItem(items, locale);
+}
+
+function getSingleVisitPricingItem(locale: Locale = "bg"): SiteContentPriceItem {
+  return locale === "en"
+    ? {
+        id: "single-visit",
+        name: "Single session",
+        price: "18 €",
+        text: "Reformer Pilates, 50 minutes.",
+        serviceId: primaryServiceId
+      }
+    : {
+        id: "single-visit",
+        name: "Единично посещение",
+        price: "18 €",
+        text: "Реформър пилатес, 50 минути.",
+        serviceId: primaryServiceId
+      };
+}
+
+function isSingleVisitPricingItem(item: SiteContentPriceItem, locale: Locale = "bg") {
+  const normalizedName = item.name.toLowerCase();
+
+  return (
+    item.id === "single-visit" ||
+    item.id === "single" ||
+    normalizedName.includes(locale === "bg" ? "единично" : "single") ||
+    normalizedName.includes(locale === "bg" ? "едно посещение" : "drop-in")
+  );
+}
+
+function ensureSingleVisitPricingItem(items: SiteContentPriceItem[], locale: Locale = "bg") {
+  const singleVisitItem = getSingleVisitPricingItem(locale);
+  const existingSingleVisitIndex = items.findIndex((item) => isSingleVisitPricingItem(item, locale));
+
+  if (existingSingleVisitIndex === -1) {
+    return [singleVisitItem, ...items];
+  }
+
+  return items.map((item, index) => {
+    if (index !== existingSingleVisitIndex) return item;
+
+    return {
+      ...item,
+      id: item.id || singleVisitItem.id,
+      price: item.price || singleVisitItem.price,
+      text: item.text || singleVisitItem.text,
+      serviceId: item.serviceId || singleVisitItem.serviceId
+    };
+  });
 }
 
 function normalizeFaqItems(
@@ -778,12 +842,7 @@ function normalizeFaqItems(
 }
 
 function getPricingButtonLabel(item: SiteContentPriceItem, locale: Locale) {
-  const singleVisitIds = new Set(["price-1", "single-visit", "single"]);
-  const isSingleVisit =
-    singleVisitIds.has(item.id) ||
-    item.name.toLowerCase().includes(locale === "bg" ? "единично" : "single");
-
-  if (isSingleVisit) {
+  if (isSingleVisitPricingItem(item, locale)) {
     return locale === "bg" ? "Запази час" : "Book session";
   }
 
@@ -803,6 +862,20 @@ function isPlaceholderPricingNote(note: string) {
     normalizedNote === "добави реалните цени, когато клиентът ги изпрати." ||
     normalizedNote === "add the real prices when the client sends them."
   );
+}
+
+function normalizePricingHeading(heading: string, locale: Locale) {
+  const normalizedHeading = heading.trim().toLowerCase();
+
+  if (locale === "bg" && normalizedHeading === "пакети") {
+    return "Цени и пакети";
+  }
+
+  if (locale === "en" && normalizedHeading === "packages") {
+    return "Pricing and packages";
+  }
+
+  return heading;
 }
 
 function isComingSoonPricingItem(item: SiteContentPriceItem) {
@@ -859,10 +932,13 @@ function normalizeSiteContent(raw: unknown, fallback: SiteContent, locale: Local
         fallback.labels.audienceHeading,
         locale
       ),
-      pricingHeading: normalizeLocalizedContentString(
-        labels,
-        "pricingHeading",
-        fallback.labels.pricingHeading,
+      pricingHeading: normalizePricingHeading(
+        normalizeLocalizedContentString(
+          labels,
+          "pricingHeading",
+          fallback.labels.pricingHeading,
+          locale
+        ),
         locale
       ),
       faqHeading: normalizeLocalizedContentString(labels, "faqHeading", fallback.labels.faqHeading, locale),

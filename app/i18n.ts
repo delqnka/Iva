@@ -69,7 +69,7 @@ export const homeCopy = {
     bookingTitle: "Запази час.",
     bookingBody:
       "Избери удобен час и запази мястото си директно през сайта.",
-    pricingLabel: "Пакети",
+    pricingLabel: "Цени и пакети",
     bookCta: "Запази",
     faqTitle: "Често задавани въпроси",
     socialMediaLabel: "Социални мрежи",
@@ -145,7 +145,7 @@ export const homeCopy = {
     bookingTitle: "Book your session.",
     bookingBody:
       "Choose a convenient time and reserve your place directly on the site.",
-    pricingLabel: "Packages",
+    pricingLabel: "Pricing and packages",
     bookCta: "Book now",
     faqTitle: "Frequently asked questions",
     socialMediaLabel: "Social media",
