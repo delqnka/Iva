@@ -1723,6 +1723,7 @@ export async function HomePage({ locale }: { locale: Locale }) {
           {pageContent.siteContent.pricing.items.map((item, index) => {
             const pricingImage = pricingImages[index % pricingImages.length];
             const isComingSoon = isComingSoonPricingItem(item);
+            const isSingleVisit = isSingleVisitPricingItem(item, locale);
             const pricingDescription = getPricingDescription(item);
 
             return (
@@ -1744,23 +1745,14 @@ export async function HomePage({ locale }: { locale: Locale }) {
                   {pricingDescription ? <p>{pricingDescription}</p> : null}
                 </div>
                 {item.price ? <p className="price">{item.price}</p> : null}
-                {isComingSoon ? (
-                  <button
-                    type="button"
-                    className="btn btn-compact pricing-card__disabled-action"
-                    disabled
-                    aria-disabled="true"
-                  >
-                    {locale === "bg" ? "Очаквайте скоро" : "Coming soon"}
-                  </button>
-                ) : (
+                {isSingleVisit ? (
                   <PrimaryBookingButton
                     className="btn-compact"
                     service={item.serviceId || undefined}
                   >
                     {getPricingButtonLabel(item, locale)}
                   </PrimaryBookingButton>
-                )}
+                ) : null}
               </article>
             );
           })}
