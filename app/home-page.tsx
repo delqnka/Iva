@@ -1573,7 +1573,6 @@ export async function HomePage({ locale }: { locale: Locale }) {
               {
                 name: "Strong Mat",
                 serviceId: strongMatServiceId,
-                trainerName: "Йоанна",
                 schedule: locale === "bg" ? "Петък · 19:00" : "Friday · 19:00",
                 cta: locale === "bg" ? "Запази Strong Mat" : "Book Strong Mat",
                 body:
@@ -1584,7 +1583,6 @@ export async function HomePage({ locale }: { locale: Locale }) {
               {
                 name: "Stretch Mat",
                 serviceId: stretchMatServiceId,
-                trainerName: "Жени",
                 schedule: locale === "bg" ? "Четвъртък · 19:00" : "Thursday · 19:00",
                 cta: locale === "bg" ? "Запази Stretch Mat" : "Book Stretch Mat",
                 body:
@@ -1602,7 +1600,6 @@ export async function HomePage({ locale }: { locale: Locale }) {
                     <PrimaryBookingButton
                       service={matClass.serviceId}
                       lockService
-                      trainerName={matClass.trainerName}
                       className="mat-format-row__button"
                     >
                       {matClass.cta}
