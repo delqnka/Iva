@@ -34,6 +34,26 @@ type SiteContentPriceItem = {
   serviceId: string;
 };
 
+type PublicPackageDefinition = {
+  id?: unknown;
+  name?: unknown;
+  description?: unknown;
+  totalSessions?: unknown;
+  total_sessions?: unknown;
+  credits?: unknown;
+  price?: unknown;
+  validityDays?: unknown;
+  validity_days?: unknown;
+  validDays?: unknown;
+  valid_days?: unknown;
+  serviceIds?: unknown;
+  service_ids?: unknown;
+  serviceId?: unknown;
+  service_id?: unknown;
+  isActive?: unknown;
+  is_active?: unknown;
+};
+
 type SiteContent = {
   seo: {
     title: string;
@@ -122,7 +142,11 @@ type PublicSalonPayload = {
     instagram_username?: unknown;
     facebook_username?: unknown;
     tiktok_username?: unknown;
+    packageDefinitions?: unknown;
+    package_definitions?: unknown;
   };
+  packageDefinitions?: unknown;
+  package_definitions?: unknown;
 };
 
 type PageContent = {
@@ -756,6 +780,95 @@ function normalizePriceItems(
   return ensureSingleVisitPricingItem(items, locale);
 }
 
+function normalizeNumber(value: unknown) {
+  if (typeof value === "number" && Number.isFinite(value)) return value;
+  if (typeof value !== "string") return null;
+
+  const normalized = value.trim().replace(",", ".");
+  if (!/^\d+(?:\.\d+)?$/.test(normalized)) return null;
+
+  const numberValue = Number(normalized);
+  return Number.isFinite(numberValue) ? numberValue : null;
+}
+
+function formatPackagePrice(value: unknown) {
+  const numericValue = normalizeNumber(value);
+  if (numericValue != null) {
+    return `${Number.isInteger(numericValue) ? numericValue : numericValue.toFixed(2)} €`;
+  }
+
+  return normalizeString(value);
+}
+
+function normalizeServiceIds(value: unknown) {
+  if (!Array.isArray(value)) return [];
+  return value.map((item) => normalizeString(item)).filter(Boolean);
+}
+
+function getPackageDefinitions(payload: PublicSalonPayload, salon: Record<string, unknown>) {
+  const sources = [
+    payload.packageDefinitions,
+    payload.package_definitions,
+    salon.packageDefinitions,
+    salon.package_definitions
+  ];
+
+  return sources.find((source) => Array.isArray(source)) ?? [];
+}
+
+function normalizePackageDefinitions(
+  value: unknown,
+  locale: Locale
+): SiteContentPriceItem[] {
+  if (!Array.isArray(value)) return [];
+
+  return value
+    .map((item, index) => {
+      if (!isRecord(item)) return null;
+      const pkg = item as PublicPackageDefinition;
+      const isActive = pkg.isActive ?? pkg.is_active;
+      if (isActive === false) return null;
+
+      const name = normalizeString(pkg.name);
+      if (!name) return null;
+
+      const totalSessions =
+        normalizeNumber(pkg.totalSessions ?? pkg.total_sessions ?? pkg.credits) ?? 0;
+      const validityDays =
+        normalizeNumber(pkg.validityDays ?? pkg.validity_days ?? pkg.validDays ?? pkg.valid_days) ??
+        0;
+      const sessionText =
+        totalSessions > 0
+          ? locale === "en"
+            ? `${totalSessions} ${totalSessions === 1 ? "training" : "trainings"}`
+            : `${totalSessions} ${totalSessions === 1 ? "тренировка" : "тренировки"}`
+          : "";
+      const validityText =
+        validityDays > 0
+          ? locale === "en"
+            ? `Validity: ${validityDays} days`
+            : `Валидност: ${validityDays} дни`
+          : "";
+      const description = normalizeString(pkg.description);
+      const serviceIds = normalizeServiceIds(pkg.serviceIds ?? pkg.service_ids);
+      const serviceId =
+        serviceIds[0] ||
+        normalizeString(pkg.serviceId ?? pkg.service_id) ||
+        primaryServiceId;
+
+      return {
+        id: normalizeString(pkg.id) || `package-${index + 1}`,
+        name,
+        price: formatPackagePrice(pkg.price),
+        text: [[sessionText, validityText].filter(Boolean).join(" · "), description]
+          .filter(Boolean)
+          .join(" · "),
+        serviceId
+      };
+    })
+    .filter(Boolean) as SiteContentPriceItem[];
+}
+
 function getSingleVisitPricingItem(locale: Locale = "bg"): SiteContentPriceItem {
   return locale === "en"
     ? {
@@ -1153,6 +1266,20 @@ export async function loadPageContent(locale: Locale): Promise<PageContent> {
       fallbackSiteContent,
       locale
     );
+    const packagePricingItems = normalizePackageDefinitions(
+      getPackageDefinitions(payload, salonRecord),
+      locale
+    );
+    const resolvedSiteContent =
+      packagePricingItems.length > 0
+        ? {
+            ...siteContent,
+            pricing: {
+              ...siteContent.pricing,
+              items: packagePricingItems
+            }
+          }
+        : siteContent;
 
     const remoteImageUrls = Array.isArray(salon.images)
       ? salon.images
@@ -1221,7 +1348,7 @@ export async function loadPageContent(locale: Locale): Promise<PageContent> {
           : hasField(salonRecord, "faq_items"),
         locale
       ),
-      siteContent,
+      siteContent: resolvedSiteContent,
       galleryImages: galleryImages.length > 0 ? galleryImages : fallbackGalleryImages,
       phone: normalizeString(salon.phone),
       email: normalizeString(salon.email),
