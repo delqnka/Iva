@@ -1285,7 +1285,6 @@ export async function loadPageContent(locale: Locale): Promise<PageContent> {
       ? salon.images
           .map((image) => normalizeString(image))
           .filter(Boolean)
-          .slice(0, 6)
       : [];
 
     const version =
