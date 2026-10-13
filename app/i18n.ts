@@ -280,9 +280,7 @@ export const legalCopy = {
           body:
             "Ако имате въпроси относно тази Политика за поверителност, моля, свържете се с нас на: {contact}."
         }
-      ],
-      note:
-        "Този текст е изготвен според предоставената информация за студиото и е препоръчително да бъде финално прегледан от юрист."
+      ]
     },
     terms: {
       title: "Общи условия",
@@ -348,9 +346,7 @@ export const legalCopy = {
           title: "Контакт",
           body: "Ако имате въпроси относно настоящите Общи условия или политиката за възстановяване на суми, моля, свържете се с нас на: {contact}. Благодарим Ви, че избрахте Reset Body Lab."
         }
-      ],
-      note:
-        "Този текст е изготвен според предоставената информация за студиото и е препоръчително да бъде финално прегледан от юрист."
+      ]
     },
     cookies: {
       title: "Политика за бисквитки",
@@ -430,9 +426,7 @@ export const legalCopy = {
           body:
             "If you have questions about this Privacy Policy, please contact us at: {contact}."
         }
-      ],
-      note:
-        "This text was prepared based on the information provided by the studio and should ideally be reviewed by a lawyer before final use."
+      ]
     },
     terms: {
       title: "Terms and conditions",
@@ -498,9 +492,7 @@ export const legalCopy = {
           title: "Contact",
           body: "If you have questions about these Terms and Conditions or the refund policy, please contact us at: {contact}. Thank you for choosing Reset Body Lab."
         }
-      ],
-      note:
-        "This text was prepared based on the information provided by the studio and should ideally be reviewed by a lawyer before final use."
+      ]
     },
     cookies: {
       title: "Cookie policy",

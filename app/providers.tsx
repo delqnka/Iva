@@ -23,8 +23,10 @@ export function Providers({ children }: { children: React.ReactNode }) {
       salonSlug={bookingSalonSlug}
       engineUrl={bookingEngineUrl}
       apiKey={process.env.NEXT_PUBLIC_BOOKING_API_KEY}
+      locale={locale}
       successUrl={`${siteUrl}${localizedPath(locale, "/booking/success")}`}
       cancelUrl={`${siteUrl}${localizedPath(locale, "/booking/cancel")}`}
+      basePath={locale === "bg" ? "" : `/${locale}`}
       accentGradient="linear-gradient(135deg, #849078 0%, #5f7354 100%)"
       staffProfileBasePath="/book"
     >

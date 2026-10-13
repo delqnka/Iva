@@ -56,7 +56,6 @@ export async function LegalPageView({
                   </p>
                 </div>
               ))}
-              {"note" in page ? <p className="legal-note">{page.note}</p> : null}
             </>
           )}
         </div>
