@@ -60,6 +60,9 @@ export function TeamSection({
             >
               <h3>{member.name}</h3>
               <p className="team-card__role">{isBg ? "Инструктор" : "Instructor"}</p>
+              {member.bio?.trim() ? (
+                <p className="team-card__bio-preview">{member.bio.trim()}</p>
+              ) : null}
             </button>
           </article>
         ))}
