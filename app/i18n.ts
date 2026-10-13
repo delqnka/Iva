@@ -238,7 +238,7 @@ export const legalCopy = {
     privacy: {
       title: "Политика за поверителност",
       intro:
-        "Reset Body Lab Pilates & Reformer Studio. Дата на влизане в сила: 12.10.2026. Настоящата Политика за поверителност пояснява как събираме, използваме, разкриваме и защитаваме вашата информация, когато посещавате нашия уебсайт и ползвате нашите услуги.",
+        "Reset Body Lab Pilates & Reformer Studio се управлява от Стрива ЕООД, ЕИК 208958117. Дата на влизане в сила: 12.10.2026. Настоящата Политика за поверителност пояснява как събираме, използваме, разкриваме и защитаваме вашата информация, когато посещавате нашия уебсайт и ползвате нашите услуги.",
       sections: [
         {
           title: "Информация, която събираме",
@@ -287,7 +287,7 @@ export const legalCopy = {
     terms: {
       title: "Общи условия",
       intro:
-        "Reset Body Lab Pilates & Reformer Studio. Дата на влизане в сила: 12.10.2026. Настоящите Общи условия уреждат използването на нашия уебсайт и участието Ви в нашите услуги. С достъпа до сайта или резервирането на услуга Вие се съгласявате с тези условия.",
+        "Reset Body Lab Pilates & Reformer Studio се управлява от Стрива ЕООД, ЕИК 208958117. Дата на влизане в сила: 12.10.2026. Настоящите Общи условия уреждат използването на нашия уебсайт и участието Ви в нашите услуги. С достъпа до сайта или резервирането на услуга Вие се съгласявате с тези условия.",
       sections: [
         {
           title: "1. Резервация и плащане",
@@ -388,7 +388,7 @@ export const legalCopy = {
     privacy: {
       title: "Privacy policy",
       intro:
-        "Reset Body Lab Pilates & Reformer Studio. Effective date: 12.10.2026. This Privacy Policy explains how we collect, use, disclose, and protect your information when you visit our website and use our services.",
+        "Reset Body Lab Pilates & Reformer Studio is operated by Striva EOOD, UIC 208958117. Effective date: 12.10.2026. This Privacy Policy explains how we collect, use, disclose, and protect your information when you visit our website and use our services.",
       sections: [
         {
           title: "Information we collect",
@@ -437,7 +437,7 @@ export const legalCopy = {
     terms: {
       title: "Terms and conditions",
       intro:
-        "Reset Body Lab Pilates & Reformer Studio. Effective date: 12.10.2026. These Terms and Conditions govern the use of our website and participation in our services. By accessing the site or booking a service, you agree to these terms.",
+        "Reset Body Lab Pilates & Reformer Studio is operated by Striva EOOD, UIC 208958117. Effective date: 12.10.2026. These Terms and Conditions govern the use of our website and participation in our services. By accessing the site or booking a service, you agree to these terms.",
       sections: [
         {
           title: "1. Booking and payment",
