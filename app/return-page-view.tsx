@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Suspense } from "react";
 import { BookingCancelCleanup } from "./booking-cancel-cleanup";
+import { BookingPaymentSync } from "./booking-payment-sync";
 import { localizedPath, returnPageCopy, type Locale, type ReturnPageKey } from "./i18n";
 
 export function ReturnPageView({
@@ -17,6 +18,11 @@ export function ReturnPageView({
       {pageKey === "cancel" ? (
         <Suspense fallback={null}>
           <BookingCancelCleanup />
+        </Suspense>
+      ) : null}
+      {pageKey === "success" ? (
+        <Suspense fallback={null}>
+          <BookingPaymentSync />
         </Suspense>
       ) : null}
       <section>
