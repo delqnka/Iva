@@ -2253,18 +2253,95 @@ p {
 }
 
 .return-page {
-  display: grid;
+  display: flex;
   min-height: 100dvh;
-  place-items: center;
-  padding: 24px;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(22px, 5vw, 64px);
+  background:
+    radial-gradient(circle at 50% 18%, rgba(132, 144, 120, 0.18), transparent 32%),
+    linear-gradient(180deg, #f8f7f2 0%, #ecebe4 100%);
 }
 
 .return-page section {
-  width: min(100%, 680px);
-  padding: clamp(28px, 6vw, 56px);
-  border-radius: 8px;
-  background: var(--surface);
-  box-shadow: var(--shadow);
+  width: min(100%, 560px);
+  padding: clamp(30px, 6vw, 54px);
+  border: 1px solid rgba(62, 68, 54, 0.08);
+  border-radius: 28px;
+  background: rgba(255, 255, 255, 0.86);
+  box-shadow: 0 26px 70px rgba(34, 37, 30, 0.14);
+  text-align: center;
+}
+
+.return-page .eyebrow {
+  color: var(--booking-accent-strong);
+}
+
+.return-page__mark {
+  display: grid;
+  width: 64px;
+  height: 64px;
+  place-items: center;
+  margin: 0 auto 18px;
+  border-radius: 999px;
+  font-size: 30px;
+  font-weight: 800;
+}
+
+.return-page__mark--success {
+  color: #fff;
+  background: linear-gradient(180deg, var(--booking-accent), var(--booking-accent-strong));
+  box-shadow: 0 14px 34px rgba(95, 115, 84, 0.28);
+}
+
+.return-page__mark--cancel {
+  color: #8a5a18;
+  background: #f8ead5;
+}
+
+.return-page h1 {
+  margin: 0;
+  color: #20231d;
+  font-size: clamp(34px, 6vw, 58px);
+  line-height: 0.98;
+}
+
+.return-page section > p:not(.eyebrow):not(.return-page__sync):not(.return-page__note) {
+  max-width: 440px;
+  margin: 18px auto 0;
+  color: rgba(32, 35, 29, 0.68);
+  font-size: 17px;
+  line-height: 1.6;
+}
+
+.return-page__sync,
+.return-page__note {
+  max-width: 430px;
+  margin: 14px auto 0;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.return-page__sync {
+  padding: 10px 14px;
+  border-radius: 999px;
+  background: rgba(132, 144, 120, 0.12);
+  color: #4f6047;
+  font-weight: 700;
+}
+
+.return-page__sync--pending,
+.return-page__sync--error {
+  background: rgba(195, 128, 50, 0.14);
+  color: #7a4f18;
+}
+
+.return-page__note {
+  color: rgba(32, 35, 29, 0.46);
+}
+
+.return-page .btn {
+  margin-top: 26px;
 }
 
 .site-footer {

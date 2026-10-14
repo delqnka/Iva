@@ -526,29 +526,33 @@ export const legalCopy = {
 export const returnPageCopy = {
   bg: {
     success: {
-      eyebrow: "Резервацията е приета",
-      title: "Часът е запазен.",
-      body: "Ще получиш потвърждение според настройките на Reset Body Lab.",
+      eyebrow: "Плащането е прието",
+      title: "Резервацията е потвърдена.",
+      body: "Благодарим ти. Ще получиш потвърждение за часа и плащането на посочения имейл.",
+      note: "Ако си закупила пакет, кредитите ще бъдат активирани автоматично.",
       cta: "Обратно към сайта"
     },
     cancel: {
       eyebrow: "Резервацията не е завършена",
       title: "Можеш да избереш друг час.",
-      body: "Върни се към сайта и отвори резервацията отново, когато си готова.",
+      body: "Плащането не беше завършено. Върни се към сайта и отвори резервацията отново, когато си готова.",
+      note: "Ако виждаш задържана сума в банката, тя обикновено се освобождава автоматично от платежния оператор.",
       cta: "Избери час"
     }
   },
   en: {
     success: {
-      eyebrow: "Your booking was received",
-      title: "Your session is reserved.",
-      body: "You will receive a confirmation based on Reset Body Lab's booking settings.",
+      eyebrow: "Payment received",
+      title: "Your booking is confirmed.",
+      body: "Thank you. You will receive a confirmation for the session and payment by email.",
+      note: "If you purchased a package, the credits will be activated automatically.",
       cta: "Back to site"
     },
     cancel: {
       eyebrow: "The booking was not completed",
       title: "You can choose another time.",
-      body: "Return to the site and open the booking flow again whenever you are ready.",
+      body: "The payment was not completed. Return to the site and open the booking flow again whenever you are ready.",
+      note: "If your bank shows a temporary hold, it is usually released automatically by the payment provider.",
       cta: "Choose a time"
     }
   }
