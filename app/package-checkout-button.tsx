@@ -44,8 +44,8 @@ export function PackageCheckoutButton({
           },
           body: JSON.stringify({
             packageDefinitionId: packageId,
-            successUrl: `${siteUrl}${localizedPath(locale, "/booking/success")}`,
-            cancelUrl: `${siteUrl}${localizedPath(locale, "/booking/cancel")}`
+            successUrl: `${siteUrl}${localizedPath(locale, "/booking/success")}?package_id=${encodeURIComponent(packageId)}`,
+            cancelUrl: `${siteUrl}${localizedPath(locale, "/booking/cancel")}?package_id=${encodeURIComponent(packageId)}`
           })
         }
       );

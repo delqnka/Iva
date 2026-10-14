@@ -2344,6 +2344,16 @@ p {
   margin-top: 26px;
 }
 
+.return-page__later {
+  display: block;
+  width: fit-content;
+  margin: 14px auto 0;
+  color: rgba(32, 35, 29, 0.55);
+  font-size: 14px;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
 .site-footer {
   display: grid;
   grid-template-columns: minmax(280px, 1fr) minmax(320px, 1fr);
