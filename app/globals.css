@@ -1919,6 +1919,13 @@ p {
   transform: none;
 }
 
+.pricing-card__error {
+  margin: 0;
+  color: #9f2f24;
+  font-size: 0.82rem;
+  line-height: 1.45;
+}
+
 .pricing-note {
   margin-top: 24px;
 }

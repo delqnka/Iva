@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { GalleryPreview } from "./gallery-preview";
+import { PackageCheckoutButton } from "./package-checkout-button";
 import { PrimaryBookingButton, primaryServiceId, strongMatServiceId, stretchMatServiceId } from "./booking-actions";
 import { homeCopy, isLocale, type Locale, localizedPath } from "./i18n";
 import { loadStaffMembers, type StaffMember } from "./staff";
@@ -32,6 +33,7 @@ type SiteContentPriceItem = {
   price: string;
   text: string;
   serviceId: string;
+  packageId?: string;
 };
 
 type PublicPackageDefinition = {
@@ -863,7 +865,8 @@ function normalizePackageDefinitions(
         text: [[sessionText, validityText].filter(Boolean).join(" · "), description]
           .filter(Boolean)
           .join(" · "),
-        serviceId
+        serviceId,
+        packageId: normalizeString(pkg.id) || undefined
       };
     })
     .filter(Boolean) as SiteContentPriceItem[];
@@ -1748,6 +1751,14 @@ export async function HomePage({ locale }: { locale: Locale }) {
                   >
                     {getPricingButtonLabel(item, locale)}
                   </PrimaryBookingButton>
+                ) : item.packageId && !isComingSoon ? (
+                  <PackageCheckoutButton
+                    packageId={item.packageId}
+                    locale={locale}
+                    className="btn-compact"
+                  >
+                    {getPricingButtonLabel(item, locale)}
+                  </PackageCheckoutButton>
                 ) : null}
               </article>
             );
