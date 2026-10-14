@@ -1,4 +1,6 @@
 import Link from "next/link";
+import { Suspense } from "react";
+import { BookingCancelCleanup } from "./booking-cancel-cleanup";
 import { localizedPath, returnPageCopy, type Locale, type ReturnPageKey } from "./i18n";
 
 export function ReturnPageView({
@@ -12,6 +14,11 @@ export function ReturnPageView({
 
   return (
     <main className="return-page">
+      {pageKey === "cancel" ? (
+        <Suspense fallback={null}>
+          <BookingCancelCleanup />
+        </Suspense>
+      ) : null}
       <section>
         <p className="eyebrow">{copy.eyebrow}</p>
         <h1>{copy.title}</h1>
